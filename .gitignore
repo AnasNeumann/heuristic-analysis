@@ -1,0 +1,153 @@
+#=====================================================
+#mqt-8100-WS AND COMMON useless files
+#=====================================================
+.metadata
+bin/
+tmp/
+*.war
+*.jar
+*.tgz
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+# Idea
+.idea/
+.idea/*
+.idea*
+
+#=====================================================
+#mqt-8100-MOBILE useless files
+#=====================================================
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+mqt-8100-mobile/*~
+mqt-8100-mobile/*.sw[mnpcod]
+mqt-8100-mobile/*.log
+mqt-8100-mobile/*.tmp
+mqt-8100-mobile/*.tmp.*
+mqt-8100-mobile/log.txt
+mqt-8100-mobile/*.sublime-project
+mqt-8100-mobile/*.sublime-workspace
+mqt-8100-mobile/.vscode/
+mqt-8100-mobile/npm-debug.log*
+
+mqt-8100-mobile/.idea/
+mqt-8100-mobile/sourcemaps/
+mqt-8100-mobile/.sass-cache/
+mqt-8100-mobile/.tmp/
+mqt-8100-mobile/.versions/
+mqt-8100-mobile/coverage/
+mqt-8100-mobile/dist/
+mqt-8100-mobile//
+mqt-8100-mobile/tmp/
+mqt-8100-mobile/temp/
+mqt-8100-mobile/hooks/
+mqt-8100-mobile/platforms/
+mqt-8100-mobile/plugins/
+mqt-8100-mobile/plugins/android.json
+mqt-8100-mobile/plugins/ios.json
+mqt-8100-mobile/www/
+mqt-8100-mobile/$RECYCLE.BIN/
+
+mqt-8100-mobile/.DS_Store
+mqt-8100-mobile/Thumbs.db
+mqt-8100-mobile/UserInterfaceState.xcuserstate
+
+#=====================================================
+#mqt-8100-UI useless files
+#=====================================================
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+mqt-8100-ui/dist
+mqt-8100-ui/tmp
+mqt-8100-ui/out-tsc
+
+# dependencies
+mqt-8100-ui/node_modules
+
+# IDEs and editors
+mqt-8100-ui/.idea
+mqt-8100-ui/.project
+mqt-8100-ui/.classpath
+mqt-8100-ui/.c9/
+mqt-8100-ui/*.launch
+mqt-8100-ui/.settings/
+mqt-8100-ui/*.sublime-workspace
+
+# IDE - VSCode
+mqt-8100-ui/.vscode/*
+mqt-8100-ui/!.vscode/settings.json
+mqt-8100-ui/!.vscode/tasks.json
+mqt-8100-ui/!.vscode/launch.json
+mqt-8100-ui/!.vscode/extensions.json
+
+# misc
+mqt-8100-ui/.sass-cache
+mqt-8100-ui/connect.lock
+mqt-8100-ui/coverage
+mqt-8100-ui/libpeerconnection.log
+mqt-8100-ui/npm-debug.log
+mqt-8100-ui/testem.log
+mqt-8100-ui/typings
+
+# e2e
+mqt-8100-ui/e2e/*.js
+mqt-8100-ui/e2e/*.map
+
+# System Files
+mqt-8100-ui/.DS_Store
+mqt-8100-ui/Thumbs.db
+
+#=====================================================
+#mqt-8100-BACTH useless files
+#=====================================================
+
+mqt-8100-batch/build/
+mqt-8100-batch/target/

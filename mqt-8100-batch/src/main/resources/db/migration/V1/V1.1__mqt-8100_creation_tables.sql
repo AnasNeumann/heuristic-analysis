@@ -1,0 +1,77 @@
+-- Création des tables du projet
+-- created by Anas Neumann <anas.neumann.isamm@gmail.com>
+-- since 05/02/2019
+
+-- ********************************************************************************************
+-- STRUCTURE DE DONNEES POUR LES HEURISTIC V1
+-- ********************************************************************************************
+
+CREATE TABLE ISTANCE (
+	ID SERIAL PRIMARY KEY,
+	OPTIMAL INTEGER NOT NULL DEFAULT 1,
+	TIMESTAMPS TIMESTAMP
+);
+
+CREATE TABLE HEURISTIC (
+	ID SERIAL PRIMARY KEY,
+	NAME VARCHAR(150),
+	TIMESTAMPS TIMESTAMP
+);
+
+CREATE TABLE VALUES (
+	ID SERIAL PRIMARY KEY,
+	VALUE INTEGER NOT NULL DEFAULT 1,
+	ISTANCE_ID INTEGER  NOT NULL,
+	HEURISTIC_ID INTEGER  NOT NULL,
+	TIMESTAMPS TIMESTAMP,
+    CONSTRAINT FK_VALUES_HEURISTIC_ID  FOREIGN KEY (HEURISTIC_ID) REFERENCES HEURISTIC (ID),
+    CONSTRAINT FK_VALUES_ISTANCE_ID  FOREIGN KEY (ISTANCE_ID) REFERENCES ISTANCE (ID)
+);
+
+-- ********************************************************************************************
+-- CONNEXION A UN COMPTE
+-- ********************************************************************************************
+
+CREATE TABLE USER_ACCOUNT (
+    ID SERIAL PRIMARY KEY,
+    MAIL VARCHAR(150) UNIQUE NOT NULL,
+    PASSWORD VARCHAR(150) NOT NULL,
+    IS_ADMIN BOOLEAN DEFAULT FALSE,
+    STATE INTEGER NOT NULL DEFAULT 1,
+    VALIDATION VARCHAR(450),
+    ACCESS_TOKEN VARCHAR(450),
+    ACCESS_DELAY TIMESTAMP,
+    REFRESH_TOKEN VARCHAR(450),
+    REFRESH_DELAY TIMESTAMP,
+    TIMESTAMPS TIMESTAMP
+);
+
+CREATE TABLE PROFILE (
+    ID SERIAL PRIMARY KEY,
+    LAST_NAME VARCHAR(150),
+    FIRST_NAME VARCHAR(150),
+    ADDRESS VARCHAR(450),
+    PHONE_NUMBER VARCHAR(150),
+    BORN_DATE TIMESTAMP,
+    AVATAR BYTEA NULL,
+    COVER BYTEA NULL,
+    JOB VARCHAR(250),
+    CATEGORY VARCHAR(100),
+    TIMESTAMPS TIMESTAMP,
+    USER_ID INTEGER NOT NULL,
+    CONSTRAINT FK_PROFILE_USER_ID  FOREIGN KEY (USER_ID) REFERENCES USER_ACCOUNT (ID)
+);
+
+-- ********************************************************************************************
+-- CONTACT US
+-- ********************************************************************************************
+
+CREATE TABLE MESSAGE (
+    ID SERIAL PRIMARY KEY,
+    MAIL VARCHAR(200) NOT NULL,
+    NAME VARCHAR(250) NOT NULL,
+    SUBJECT VARCHAR(250) NOT NULL,
+    MESSAGE TEXT,
+    STATE INTEGER NOT NULL DEFAULT 0,
+    TIMESTAMPS TIMESTAMP
+);

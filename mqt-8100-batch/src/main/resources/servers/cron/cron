@@ -1,0 +1,5 @@
+30 2 * * *  /BACK_MQT-8100/install.sh --backup
+0 0 */1 * * echo "" > /var/log/jenkins/jenkins.log
+0 0 */1 * * rm -rf /var/log/jenkins/jenkins.log-*
+0 0 * */1 * /BACK_MQT-8100/export_git/mqt-8100-batch/src/main/resources/shell/letsrenew.sh
+

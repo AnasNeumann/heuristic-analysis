@@ -1,0 +1,3 @@
+-- drop all tables before re-install the database
+-- created by Anas Neumann <anas.neumann.isamm@gmail.com>
+-- since 05/02/2019

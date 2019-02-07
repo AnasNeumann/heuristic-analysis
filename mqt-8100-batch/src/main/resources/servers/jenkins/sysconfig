@@ -1,0 +1,4 @@
+# Replace with this value
+JENKINS_PORT="9280"
+JENKINS_ARGS="--prefix=/jenkins"
+
