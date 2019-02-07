@@ -1,0 +1,6 @@
+/**
+ * Styles génériques partagés par tous les components
+ */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./app/css/font-awesome.min.css";
+@import "./app/css/mqt-8100.css";

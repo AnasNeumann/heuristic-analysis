@@ -1,0 +1,3 @@
+export var config = {
+   "ws_url": "http://127.0.0.1:8085"
+};
