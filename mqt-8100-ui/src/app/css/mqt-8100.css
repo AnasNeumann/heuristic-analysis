@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+.mqt-title{
+	font-size : 24px;
+	margin : 10px;
+	color : #282828;
+	font-family: roboto;
+}
+
 @font-face{
     font-family:'ec_cour';
     src:url('../fonts/ec_cour.TTF');
