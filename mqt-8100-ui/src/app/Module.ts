@@ -13,6 +13,12 @@ import { config } from '../config';
 //IMPORT COMPONENTS
 import { Main } from './ts/components/main/Main';
 import { Home } from './ts/components/home/Home';
+import { Criteria } from './ts/components/criteria/Criteria';
+import { Dominance } from './ts/components/dominance/Dominance';
+import { Menu } from './ts/components/menu/Menu';
+import { SignTest } from './ts/components/signtest/SignTest';
+import { Wilcoxon } from './ts/components/wilcoxon/Wilcoxon';
+import { AverageTest } from './ts/components/averagetest/AverageTest';
 
 // OTHER IMPORTS
 import { Routing } from './Routing';
@@ -27,6 +33,12 @@ import { EffectService } from './ts/services/EffectService';
   declarations: [
     Main,
     Home,
+    Criteria,
+    Dominance,
+    Menu,
+    SignTest,
+    Wilcoxon,
+    AverageTest
   ],
   imports: [
     CommonModule,

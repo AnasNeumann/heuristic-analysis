@@ -1,0 +1,29 @@
+<div class="mqt-menu-container">
+
+		<div (click)="open = 1" class="mqt-menu-btn"><span class="mqt-menu-ico"><i class="fa fa-database" aria-hidden="true"></i></span> Base de données</div>
+		<div class="mqt-collapse mqt-menu-darkPart" [collapse]="open != 1" 
+			(collapsed)="setHeight(database, 0)" 
+			(expanded)="setHeight(database, 0);setHeight(database, database.scrollHeight)" 
+			#database>
+			<div routerLink="/home" class="mqt-menu-choice">Gestion des heuristiques</div>
+		</div>
+		
+		<div (click)="open = 2" class="mqt-menu-btn"><span class="mqt-menu-ico"><i class="fa fa-bar-chart" aria-hidden="true"></i></span> Module d'analyse</div>
+		<div class="mqt-collapse mqt-menu-darkPart" [collapse]="open != 2" 
+			(collapsed)="setHeight(analyze, 0)" 
+			(expanded)="setHeight(analyze, 0);setHeight(analyze, analyze.scrollHeight)" 
+			#analyze>
+			<div routerLink="/criteria" class="mqt-menu-choice">Critères d'évaluation</div>
+			<div routerLink="/dominance" class="mqt-menu-choice">Analyse de la dominance</div>
+			<div routerLink="/wilcoxon" class="mqt-menu-choice">Rangs pondérés de Wilcoxon</div>
+			<div routerLink="/signtest" class="mqt-menu-choice">Test de signe</div>
+			<div routerLink="/averagetest" class="mqt-menu-choice">Test des moyennes</div>
+		</div>
+		
+		<div (click)="open = 3" class="mqt-menu-btn"><span class="mqt-menu-ico"><i class="fa fa-connectdevelop" aria-hidden="true"></i></span> Module de résolution</div>
+		<div class="mqt-collapse mqt-menu-darkPart" [collapse]="open != 3" 
+			(collapsed)="setHeight(solve, 0)" 
+			(expanded)="setHeight(solve, 0);setHeight(solve, solve.scrollHeight)" 
+			#solve>
+		</div>
+</div>

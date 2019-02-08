@@ -1,3 +1,20 @@
-<div class="mqt-main-router">
-    <router-outlet></router-outlet>
+<div class="container-fluid">
+	<div class="row mqt-main-header">
+		<div class="row">
+			<div class="col col-lg-2 col-md-3 col-sm-3 col-xs-4 mqt-main-header-yellow"></div>
+			<div class="col col-lg-10 col-md-9 col-sm-9 col-xs-8 mqt-main-header-red"></div>
+		</div>
+		<div class="mqt-main-header-content">
+			<img routerLink="/" src="./assets/images/ulaval.png" height="30px" width="auto" /> 
+			<span class="mqt-main-header-tile"><b>MQT-8100</b> | Anas Neumann</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-lg-2 col-md-3 hidden-xs hidden-sm mqt-main-menu">
+			<mqt-menu></mqt-menu>
+		</div>
+		<div class="col col-lg-10 col-md-9 col-sm-12 col-xs-12 mqt-main-router">
+    		<router-outlet></router-outlet>
+    	</div>
+    </div>
 </div>

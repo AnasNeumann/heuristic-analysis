@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+.mqt-menu-container{
+	min-height: 95vh;
+	background-color: #3d3d3d;	
+	position: fixed;
+	width : 100%;
+	color : #ccc;
+}
+
+.mqt-menu-choice{
+	height : 40px;
+	padding : 10px;
+	cursor :pointer;
+	border-bottom : 1px solid #3F3F3F;
+}
+
+.mqt-menu-ico{
+	margin-right : 10px;
+	font-size: 18px;
+}
+
+.mqt-menu-darkPart{
+	background-color : #282828;
+}
+
+.mqt-menu-btn{
+	height : 50px;
+	padding : 15px;
+	cursor :pointer;
+	border-bottom : 1px solid #282828;
+}
+
+.mqt-menu-choice:hover,
+.mqt-menu-btn:hover{
+	color : white;
+}
