@@ -18,7 +18,7 @@ import com.mqt.pojo.vo.ValueVo;
  * @since 08/02/2019
  */
 @Service("dominanceAnalyzer")
-public class DominanceAnalyzer {
+public class DominanceAnalyzer extends GenericAnalyzer{
 
 	/**
 	 * Injection of dependencies
@@ -39,7 +39,7 @@ public class DominanceAnalyzer {
 			d.setValues(addAtPlace(deviation ,d.getValues()));
 		}
 		Collections.sort(d.getValues(), comparator);
-		return d.setH(h.setValues(null));//.setValues(changePercentage(d.getValues(), total));
+		return d.setH(h.setValues(null)).setValues(changePercentage(d.getValues(), total));
 	}
 
 	/**
@@ -49,19 +49,19 @@ public class DominanceAnalyzer {
 	 */
 	public List<InstancesByDeviationDto> addAtPlace(Integer d, List<InstancesByDeviationDto> values) {
 		boolean isPresent = false;
-		Integer valueToPlace = 1;
+		InstancesByDeviationDto maxInf = new InstancesByDeviationDto().setDeviation(0).setInstances(0);
 		for(InstancesByDeviationDto v : values) {
 			if(v.getDeviation() >= d) {
 				v.setInstances(v.getInstances() + 1);
 				if(v.getDeviation().equals(d)) {
 					isPresent = true;
 				}
-			} else {
-				valueToPlace++;
+			} else if(v.getDeviation() > maxInf.getDeviation()){
+				maxInf = v;
 			}
 		}
 		if(!isPresent) {
-			values.add(new InstancesByDeviationDto().setDeviation(d).setInstances(valueToPlace));
+			values.add(new InstancesByDeviationDto().setDeviation(d).setInstances(maxInf.getInstances() + 1));
 		}
 		return values;
 	}

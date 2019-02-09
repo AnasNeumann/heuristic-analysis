@@ -50,7 +50,6 @@ export class Dominance extends GenericComponent {
             this.loaded = true;
         });
         this.service.get("/analyzer/dominance", {}).then(response =>{
-              console.log("i'm here");
               for(var h in response.many){
                   var newData = {
                       name : response.many[h].h.name,
@@ -63,7 +62,6 @@ export class Dominance extends GenericComponent {
                   this.dominance.push(newData);
               }
               this.loaded2 = true;
-              console.log(this.dominance);
         });
      }
 

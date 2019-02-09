@@ -1,5 +1,5 @@
 package com.mqt.engine.analyze;
 
-public class WilcoxonWeightedRankAnalyzer {
+public class WilcoxonWeightedRankAnalyzer extends GenericAnalyzer {
 
 }

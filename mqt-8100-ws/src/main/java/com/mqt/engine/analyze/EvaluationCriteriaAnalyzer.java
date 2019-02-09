@@ -17,7 +17,7 @@ import com.mqt.services.ValueService;
  * @since 08/02/2019
  */
 @Service("evaluationCriteriaAnalyzer")
-public class EvaluationCriteriaAnalyzer {
+public class EvaluationCriteriaAnalyzer extends GenericAnalyzer{
 	
 	/**
 	 * Injection of dependencies
@@ -34,7 +34,7 @@ public class EvaluationCriteriaAnalyzer {
 	public CriteriaDto analyze(HeuristicVo h, Integer max) {
 		CriteriaDto c = new CriteriaDto();
 		Integer maxDeviation = 0;
-		Float averageDeviation = 0.0F;
+		Double averageDeviation = 0.0;
 		List<Integer> deviations = new ArrayList<Integer>();
 		for(ValueVo v : h.getValues()) {
 			boolean isWorst = true;
@@ -59,24 +59,10 @@ public class EvaluationCriteriaAnalyzer {
 			c.setNbrWorstValue(c.getNbrWorstValue() + (isWorst? 1 : 0));
 			c.setOptimalAlone(c.getOptimalAlone() + (0 > nbrOptimal? 1 : 0));
 		}
+		averageDeviation = averageDeviation / h.getValues().size();
 		return c.setMaxDeviation(maxDeviation)
-				.setAverageDeviation(averageDeviation/h.getValues().size())
+				.setAverageDeviation(averageDeviation)
 				.setStandardDeviation(standardDeviation(deviations, averageDeviation))
 				.setH(h.setValues(null));
 	}
-
-	/**
-	 * Calculer l'écart type des déviations
-	 * @param deviations
-	 * @param averageDeviation
-	 * @return
-	 */
-	private Double standardDeviation(List<Integer> deviations, Float averageDeviation) {
-		Double sd = 0.0;
-		for(Integer d : deviations) {
-			sd += Math.pow(d - averageDeviation, 2);
-		}
-		return Math.sqrt(sd/deviations.size());	
-	}
-	
 }

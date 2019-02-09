@@ -1,5 +1,5 @@
 package com.mqt.engine.analyze;
 
-public class SignTestAnalyzer {
+public class SignTestAnalyzer extends GenericAnalyzer {
 
 }

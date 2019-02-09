@@ -16,7 +16,7 @@ public class CriteriaDto extends AbstractResource {
 	private Integer nbrWorstValue = 0;
 	private Integer nbrOptimal = 0;
 	private Integer optimalAlone = 0;
-	private Float averageDeviation = 0.0F;
+	private Double averageDeviation = 0.0;
 	private Integer maxDeviation = 0;
 	private Double standardDeviation = 0.0;
 
@@ -87,7 +87,7 @@ public class CriteriaDto extends AbstractResource {
 	/**
 	 * @return the averageDeviation
 	 */
-	public Float getAverageDeviation() {
+	public Double getAverageDeviation() {
 		return averageDeviation;
 	}
 
@@ -95,7 +95,7 @@ public class CriteriaDto extends AbstractResource {
 	 * @param averageDeviation
 	 *            the averageDeviation to set
 	 */
-	public CriteriaDto setAverageDeviation(Float averageDeviation) {
+	public CriteriaDto setAverageDeviation(Double averageDeviation) {
 		this.averageDeviation = averageDeviation;
 		return this;
 	}
