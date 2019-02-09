@@ -12,7 +12,8 @@ import com.mqt.pojo.AbstractResource;
 public class SingleAverageStudentTestDto extends AbstractResource {
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private Boolean h0;
+	private Double t5;
+	private Double t20;
 	private Double value;
 
 	/**
@@ -23,7 +24,8 @@ public class SingleAverageStudentTestDto extends AbstractResource {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public SingleAverageStudentTestDto setName(String name) {
 		this.name = name;
@@ -31,17 +33,33 @@ public class SingleAverageStudentTestDto extends AbstractResource {
 	}
 
 	/**
-	 * @return the h0
+	 * @return the t20
 	 */
-	public Boolean getH0() {
-		return h0;
+	public Double getT20() {
+		return t20;
 	}
 
 	/**
-	 * @param h0 the h0 to set
+	 * @param t20 the t20 to set
 	 */
-	public SingleAverageStudentTestDto setH0(Boolean h0) {
-		this.h0 = h0;
+	public SingleAverageStudentTestDto setT20(Double t20) {
+		this.t20 = t20;
+		return this;
+	}
+
+	/**
+	 * @return the t5
+	 */
+	public Double getT5() {
+		return t5;
+	}
+
+	/**
+	 * @param t5
+	 *            the t5 to set
+	 */
+	public SingleAverageStudentTestDto setT5(Double t5) {
+		this.t5 = t5;
 		return this;
 	}
 
@@ -53,7 +71,8 @@ public class SingleAverageStudentTestDto extends AbstractResource {
 	}
 
 	/**
-	 * @param value the value to set
+	 * @param value
+	 *            the value5 to set
 	 */
 	public SingleAverageStudentTestDto setValue(Double value) {
 		this.value = value;

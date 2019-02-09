@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mqt.pojo.AbstractResource;
-import com.mqt.pojo.vo.HeuristicVo;
 
 /**
  * DTO pour le résultat des test de moyenne pour une heuristique
@@ -15,13 +14,13 @@ import com.mqt.pojo.vo.HeuristicVo;
  */
 public class AverageStudentTestDto extends AbstractResource {
 	private static final long serialVersionUID = 1L;
-	private HeuristicVo h;
+	private String h;
 	private List<SingleAverageStudentTestDto> tests = new ArrayList<SingleAverageStudentTestDto>();
 
 	/**
 	 * @return the h
 	 */
-	public HeuristicVo getH() {
+	public String getH() {
 		return h;
 	}
 
@@ -29,7 +28,7 @@ public class AverageStudentTestDto extends AbstractResource {
 	 * @param h
 	 *            the h to set
 	 */
-	public AverageStudentTestDto setH(HeuristicVo h) {
+	public AverageStudentTestDto setH(String h) {
 		this.h = h;
 		return this;
 	}
