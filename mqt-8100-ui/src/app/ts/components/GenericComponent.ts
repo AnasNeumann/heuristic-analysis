@@ -15,6 +15,19 @@ export class GenericComponent {
     public shareURL = "https://www.uprodit.com/mqt-8100";
     public isAdmin  : boolean = false;  
     public isConnected : boolean = false;
+    showLegend = true;
+    showLabels = true;
+    explodeSlices = false;
+    doughnut = false;
+    gradient = false;
+    showXAxis = true;
+    showYAxis = true;
+    loaded  :boolean = false;
+    showYAxisLabel = true;
+    showXAxisLabel = true;
+    colorScheme = {
+        domain: ['#e30513', '#f39612', '#7e28dd', '#23e28c']
+    };
 
     /**
      * Get the file of an object

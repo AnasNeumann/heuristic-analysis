@@ -42,7 +42,7 @@ public class ValueEntity extends AbstractResource implements Serializable {
 	@Column(name = "HEURISTIC_ID")
 	private Long heuristicId;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "ISTANCE_ID", referencedColumnName = "ID")
 	private InstanceEntity instance;
 

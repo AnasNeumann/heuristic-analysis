@@ -1,1 +1,86 @@
-<div class="mqt-title">Gestion des heuristiques</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-title">Gestion des résultats</div>
+		</div>
+		
+		<!-- FORM INSTANCE -->
+		<div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="mqt-back-white">
+				<div class="mqt-home-title">Nouvelle instance</div>
+				<div class="mqt-padding-15 mqt-home-form">
+				    <mat-input-container>
+					  <input matInput placeholder="Valeur optimale" [(ngModel)]="formInstance.optimal" />
+					</mat-input-container>
+					<div class="mqt-align-right"><button (click)="createInstance()" mat-button>Créer</button></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- FORM HEURISTIC -->
+		<div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="mqt-back-white">
+				<div class="mqt-home-title">Nouvelle heuristique</div>
+				<div class="mqt-padding-15 mqt-home-form">
+					<mat-input-container>
+					  <input matInput placeholder="Nom de l'heuristique" [(ngModel)]="formHeuristic.name" />
+					</mat-input-container>
+					<div class="mqt-align-right"><button (click)="createHeuristic()" mat-button>Créer</button></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- FORM VALUE -->
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="row">
+					<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<mat-form-field class="sd-cat-filterColor">
+	                         <mat-select placeholder="Heuristique" [(ngModel)]="this.formValue.h">
+	                           <mat-option *ngFor="let h of this.heuristics" [value]="h.id">{{h.name}}</mat-option>
+	                         </mat-select>
+	                     </mat-form-field>
+					</div>
+					<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<mat-form-field class="sd-cat-filterColor">
+	                         <mat-select placeholder="Instance" [(ngModel)]="this.formValue.i">
+	                           <mat-option *ngFor="let i of this.instances" [value]="i.id">{{i.id}}</mat-option>
+	                         </mat-select>
+	                     </mat-form-field>
+					</div>
+					<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<mat-input-container>
+						  <input matInput placeholder="Valeur obtenue" [(ngModel)]="this.formValue.value" />
+						</mat-input-container>
+					</div>
+				</div>
+				<div class="mqt-align-right"><button (click)="affect()" mat-button>Affecter</button></div>
+			</div>
+		</div>
+		
+		<!-- TABLE -->
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-home-redHeader"></div>
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="table-responsive">
+		        	<table class="table">
+				         <thead>
+				             <tr>
+				                 <th class="mqt-align-left">Instance</th>
+				                 <th class="mqt-align-left">Valeur optimale</th>
+				                 <th *ngFor="let h of heuristics"><span (click)="deleteHeuristic(h)" tooltip="Supprimer l'heuristique" placement="top" class="mqt-home-delete"><i class="fa fa-trash" aria-hidden="true" ></i></span> {{h.name}}</th>
+				             </tr>
+				        </thead>
+				        <tbody>
+				        	<td class="mqt-home-ligne"><tr *ngFor="let i of instances"  class="mqt-home-ligne"><span (click)="deleteInstance(i)" tooltip="Supprimer l'instance" placement="right" class="mqt-home-delete"><i class="fa fa-trash" aria-hidden="true" ></i></span> {{i.id}}</tr></td>
+				        	<td class="mqt-home-ligne"><tr *ngFor="let i of instances"  class="mqt-home-ligne mqt-home-opt">{{i.optimal}}</tr></td>
+		             		<td *ngFor="let h of heuristics" class="mqt-home-ligne">
+		             			<tr *ngFor="let v of h.values" class="mqt-home-ligne">{{v.value}}</tr>
+		             		</td>
+		       			</tbody>
+			        </table>
+		        </div>
+			</div>
+		</div>
+	</div>
+</div>

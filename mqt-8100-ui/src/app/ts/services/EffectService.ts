@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import { saveAs } from 'file-saver';
 
 /**
  * classe contenant tous les effets d'affichage
@@ -51,15 +50,5 @@ export class EffectService {
             bytes[i] = binary_string.charCodeAt(i);
         }
         return new Uint8Array(bytes.buffer);
-    }
-    
-    /**
-     * download a file
-     * @param file
-     * @param title
-     */
-    public download(file : string, title : string){
-        var content = new Blob([this.StringToUint8(file)], { type: 'application/pdf' });
-        saveAs(content, title);
     }
 } 

@@ -39,7 +39,7 @@ public class ErrorAdvice extends GenericController {
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(ErrorAdvice.class);
   private static final String MAIL_CONTENT =
-      "[ERR_TECH] from == JOSEPHYTO == in prod, www.josephyto.com :sob: mail = %s, message = %s, type = %s, stacktrace = %s";
+      "[ERR_TECH] from == MQT-8100 == in prod, www.uprodit.com/mqt-8100 :sob: mail = %s, message = %s, type = %s, stacktrace = %s";
   private static final List<String> FILTERED_ERRORS_MSG =
       Arrays.asList("java.io.IOException: Connection reset by peer",
           "Request method 'HEAD' not supported",

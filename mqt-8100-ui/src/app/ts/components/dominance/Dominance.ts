@@ -16,9 +16,17 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 @Component({
   selector: 'mqt-dominance',
   templateUrl: 'dominance.html',
-  styleUrls: ['dominance.css']
+  styleUrls: ['dominance.css', '../home/home.css']
 })
 export class Dominance extends GenericComponent {
+    loaded : boolean = false;
+    loaded2 : boolean = false;
+    data : any[] = [];
+    dominance : any[] = [];
+    xAxisLabel = "Instances";
+    yAxisLabel = "Valeurs obtenues";
+    xAxisLabel2 = "Déviation par rapport à l'optimum (%)";
+    yAxisLabel2 = "Pourcentage d'instances (%)";
 
     /**
      * Constructor
@@ -27,6 +35,28 @@ export class Dominance extends GenericComponent {
      */
      constructor(private modalService: BsModalService, private service : WebService, private messageService : MessageService, private renderer: Renderer, private localService : LocalService) {       
         super(messageService, renderer, localService);
+        this.service.get("/heuristic", {}).then(response =>{
+            for(var h in response.many){
+                var newData = {
+                    name : response.many[h].name,
+                    series : []
+                };
+                for(var v in response.many[h].values){
+                    var value = response.many[h].values[v];
+                    newData.series.push({name : value.instance.id, value : value.value});
+                }
+                this.data.push(newData);
+            }
+            this.loaded = true;
+            console.log(this.data);
+        });
+        this.service.get("/analyzer/dominance", {}).then(response =>{
+              for(var d in response.many){
+                  var newData = {
+                          
+                  };
+              }
+        });
      }
 
 }

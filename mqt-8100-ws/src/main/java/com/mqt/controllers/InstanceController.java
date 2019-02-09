@@ -4,7 +4,6 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mqt.boot.Constantes;
 import com.mqt.pojo.Response;
+import com.mqt.pojo.vo.HeuristicVo;
 import com.mqt.pojo.vo.InstanceVo;
-import com.mqt.services.InstanceService;
 
 /**
  * Controller la gestion des instances d'essai
@@ -28,12 +27,6 @@ import com.mqt.services.InstanceService;
 @CrossOrigin
 @RestController
 public class InstanceController extends GenericController {
-
-	/**
-	 * Injection de dépendances
-	 */
-	@Autowired
-	private InstanceService instanceService;
 
 	/**
 	 * get All instances
@@ -56,11 +49,15 @@ public class InstanceController extends GenericController {
 	@ResponseBody
 	@RequestMapping(value = "/instance", method = RequestMethod.POST, produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> create(HttpServletRequest request) {
-		Long id = instanceService.createOrUpdate(new InstanceVo()
+		InstanceVo i = new InstanceVo()
 				.setOptimal(update(request, "optimal", 1))
 				.setId(instanceService.getAll().size() + 1L)
-				.setTimestamps(GregorianCalendar.getInstance()));
-		return id(id);
+				.setTimestamps(GregorianCalendar.getInstance());
+		i.setId(instanceService.createOrUpdate(i));
+		for(HeuristicVo h : heuristicService.getAll()) {
+			valueService.createOrUpdate(generateValue(h, i, 0));
+		}
+		return one(i);
 	}
 
 	/**

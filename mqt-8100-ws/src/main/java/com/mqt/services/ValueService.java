@@ -54,6 +54,11 @@ public class ValueService extends GenericCrudService<ValueCriteria, ValueVo, Val
 	}
 
 	@Transactional
+	public List<ValueVo> searchByInstanceId(Long instanceId, Integer maximum) {
+		return convert(repository.searchByInstanceId(instanceId, new PageRequest(0, maximum)));
+	}
+
+	@Transactional
 	@Override
 	public List<ValueVo> getAll() {
 		return convert(repository.findAll());

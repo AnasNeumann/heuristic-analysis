@@ -7,6 +7,7 @@ import { MatToolbarModule, MatIconModule, MatNativeDateModule, MatMenuModule, Ma
 import { CarouselModule, BsDropdownModule, ModalModule, TabsModule, ButtonsModule, TooltipModule, CollapseModule } from 'ngx-bootstrap';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { QuillModule } from 'ngx-quill';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 //IMPORT PIPES
 import { EscapeHTMLPipe } from '../pipes/EscapeHTMLPipe';
@@ -44,7 +45,8 @@ import { Facebook } from '../components/facebook/Facebook';
       TabsModule.forRoot(),
       TooltipModule.forRoot(),
       ButtonsModule.forRoot(),
-      QuillModule
+      QuillModule,
+      NgxChartsModule
     ],
     exports: [
         FormsModule,
@@ -72,7 +74,8 @@ import { Facebook } from '../components/facebook/Facebook';
         EscapeHTMLPipe,
         SafeURLPipe,
         Facebook,
-        QuillModule
+        QuillModule,
+        NgxChartsModule
     ]
   })
   export class CommonModule {}

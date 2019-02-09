@@ -27,10 +27,16 @@ import com.mqt.pojo.AbstractNumerotableResource;
 import com.mqt.pojo.AuthException;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.SerializableObject;
+import com.mqt.pojo.vo.HeuristicVo;
+import com.mqt.pojo.vo.InstanceVo;
 import com.mqt.pojo.vo.UserAccountVo;
+import com.mqt.pojo.vo.ValueVo;
 import com.mqt.services.GenericDeleteService;
+import com.mqt.services.HeuristicService;
+import com.mqt.services.InstanceService;
 import com.mqt.services.ProfileService;
 import com.mqt.services.UserAccountService;
+import com.mqt.services.ValueService;
 import com.mqt.utils.DateUtils;
 import com.mqt.utils.FilesUtils;
 import com.mqt.utils.StringsUtils;
@@ -57,15 +63,38 @@ public class GenericController {
 	 */
 	@Autowired
 	protected UserAccountService userService;
-
 	@Autowired
 	protected NumerotableResourcesComparator comparatorByPosition;
-
 	@Autowired
 	protected GenericDeleteService deleteService;
-
 	@Autowired
 	protected ProfileService profileService;
+	@Autowired
+	protected HeuristicService heuristicService;
+	@Autowired
+	protected InstanceService instanceService;
+	@Autowired
+	protected ValueService valueService;
+	
+	/**
+	 * generate the new value of an heuristic for an intance
+	 * @param h
+	 * @param i
+	 * @param request
+	 * @return the value object
+	 */
+	protected ValueVo generateValue(HeuristicVo h, InstanceVo i, Integer value) {
+		for(ValueVo v : h.getValues()) {
+			if(v.getInstance().getId().equals(i.getId())) {
+				return v.setValue(value);
+			}
+		}
+		return new ValueVo()
+				.setHeuristicId(h.getId())
+				.setInstance(i)
+				.setTimestamps(GregorianCalendar.getInstance())
+				.setValue(value);
+	}
 
 	/**
 	 * Send a new email to a user

@@ -2,7 +2,8 @@
 
 .mqt-title{
 	font-size : 24px;
-	margin : 10px;
+	margin-top : 15px;
+	margin-bottom : 15px;
 	color : #282828;
 	font-family: roboto;
 }
@@ -478,7 +479,7 @@ mat-select, .mat-form-field {
 }
 
 .mat-button {
-	background-color: #833785 ;
+	background-color: #282828 ;
 	font-family: roboto light;
 }
 

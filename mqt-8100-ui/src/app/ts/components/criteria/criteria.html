@@ -1,1 +1,87 @@
-<div class="mqt-title">Critères d'évaluation</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-title">Analyse selon les critères d'évaluation de la performance</div>
+		</div>
+		
+		
+		<!-- TABLE -->
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-home-redHeader"></div>
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="table-responsive">
+		        	<table class="table table-striped">
+				         <thead>
+				             <tr>
+				                 <th>Heuristique</th>
+				                 <th>Pire déviation</th>
+				                 <th>Déviation moyenne</th>
+				                 <th>Ecart type</th>
+				                 <th>Nombre d'atteintes de l'optimalité</th>
+				                 <th>Nombre d'atteintes exclusive de l'optimalité</th>
+				                 <th>Nombre d'atteintes de la pire valeur</th>
+				             </tr>
+				        </thead>
+				        <tbody>
+				        	<tr *ngFor="let h of heuristics" class="mqt-home-ligne">
+				        		 <td>{{h.h.name}}</td>
+				        		 <td>{{h.maxDeviation}}</td>
+				        		 <td>{{h.averageDeviation}}</td>
+				        		 <td>{{h.standardDeviation}}</td>
+				        		 <td>{{h.nbrOptimal}}</td>
+				        		 <td>{{h.optimalAlone}}</td>
+				        		 <td>{{h.nbrWorstValue}}</td>
+				        	</tr>
+		       			</tbody>
+			        </table>
+		        </div>
+			</div>
+		</div>
+		
+		<!-- CHARTS MAX DEVIATION -->
+		<div *ngIf="loaded" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+		 	<div class="mqt-title">Pire déviation</div>
+		 	<ngx-charts-bar-vertical
+				  [scheme]="colorScheme"
+				  [results]="maxDeviations"
+				  [gradient]="gradient"
+				  [xAxis]="showXAxis"
+				  [yAxis]="showYAxis"
+				  [legend]="showLegend"
+				  [showXAxisLabel]="showXAxisLabel"
+				  [showYAxisLabel]="showYAxisLabel"
+				  [xAxisLabel]="xAxisLabel"
+				  [yAxisLabel]="yAxisLabel">
+			</ngx-charts-bar-vertical>
+		</div>
+		
+		<!-- CHARTS NBR OPTIMAL -->
+		<div *ngIf="loaded" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="mqt-title">Atteinte de l'optimal</div>
+		 	<ngx-charts-pie-chart
+      			[results]="optimal"
+      			[scheme]="colorScheme"
+      			[legend]="showLegend"
+      			[explodeSlices]="explodeSlices"
+      			[labels]="showLabels"
+      			[doughnut]="doughnut"
+      			[gradient]="gradient">
+		    </ngx-charts-pie-chart>
+		</div>
+		
+		<!-- CHARTS WORST VALUE -->
+		<div *ngIf="loaded" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="mqt-title">Atteinte de la pire valeur</div>
+		 	<ngx-charts-pie-chart
+      			[results]="worst"
+      			[scheme]="colorScheme"
+      			[legend]="showLegend"
+      			[explodeSlices]="explodeSlices"
+      			[labels]="showLabels"
+      			[doughnut]="doughnut"
+      			[gradient]="gradient">
+		    </ngx-charts-pie-chart>
+		</div>
+		
+	</div>
+</div>

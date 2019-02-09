@@ -16,9 +16,16 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 @Component({
   selector: 'mqt-criteria',
   templateUrl: 'criteria.html',
-  styleUrls: ['criteria.css']
+  styleUrls: ['criteria.css', '../home/home.css']
 })
 export class Criteria extends GenericComponent {
+    heuristics : any[] = [];
+    maxDeviations : any[] = [];
+    optimal : any[] = [];
+    worst  : any[] = [];
+    xAxisLabel = "Heursitiques";
+    yAxisLabel = "Deviation maximale";
+
 
     /**
      * Constructor
@@ -27,6 +34,15 @@ export class Criteria extends GenericComponent {
      */
      constructor(private modalService: BsModalService, private service : WebService, private messageService : MessageService, private renderer: Renderer, private localService : LocalService) {       
         super(messageService, renderer, localService);
+        this.service.get("/analyzer/criteria", {}).then(response =>{
+            this.heuristics = response.many;
+            for(var h in response.many){
+                this.maxDeviations.push({"name" : response.many[h].h.name, "value" : response.many[h].maxDeviation});
+                this.optimal.push({"name" : response.many[h].h.name, "value" : response.many[h].nbrOptimal});
+                this.worst.push({"name" : response.many[h].h.name, "value" : response.many[h].nbrWorstValue});
+            }
+            this.loaded = true;
+        });
      }
 
 }
