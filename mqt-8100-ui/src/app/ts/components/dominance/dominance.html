@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="mqt-title">Dominance Empirique</div>
+			<div class="mqt-title">Dominance empirique</div>
 		</div>
 		
 		<div *ngIf="loaded" class="col col-lg-12 col-md-12 col-sm-12 col-xs-12 mqt-dominance">
@@ -21,13 +21,13 @@
 		</div>
 		
 		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="mqt-title">Dominance Stochastique Empirique (Ordre 1)</div>
+			<div class="mqt-title">Dominance stochastique empirique (ordre 1)</div>
 		</div>
 		
 		<div *ngIf="loaded2" class="col col-lg-12 col-md-12 col-sm-12 col-xs-12 mqt-dominance">
 			<ngx-charts-line-chart
 			      [scheme]="colorScheme"
-			      [results]="data"
+			      [results]="dominance"
 			      [gradient]="gradient"
 			      [xAxis]="showXAxis"
 			      [yAxis]="showYAxis"

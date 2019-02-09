@@ -48,14 +48,22 @@ export class Dominance extends GenericComponent {
                 this.data.push(newData);
             }
             this.loaded = true;
-            console.log(this.data);
         });
         this.service.get("/analyzer/dominance", {}).then(response =>{
-              for(var d in response.many){
+              console.log("i'm here");
+              for(var h in response.many){
                   var newData = {
-                          
+                      name : response.many[h].h.name,
+                      series : [] 
                   };
+                  for(var v in response.many[h].values){
+                      var value = response.many[h].values[v];
+                      newData.series.push({name : value.deviation, value : value.instances});
+                  }
+                  this.dominance.push(newData);
               }
+              this.loaded2 = true;
+              console.log(this.dominance);
         });
      }
 

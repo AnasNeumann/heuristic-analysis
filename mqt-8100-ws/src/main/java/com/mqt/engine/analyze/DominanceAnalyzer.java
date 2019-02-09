@@ -1,8 +1,12 @@
 package com.mqt.engine.analyze;
 
+import java.util.Collections;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mqt.comparators.InstancesByDeviationComparator;
 import com.mqt.pojo.dto.DominanceDto;
 import com.mqt.pojo.dto.InstancesByDeviationDto;
 import com.mqt.pojo.vo.HeuristicVo;
@@ -17,17 +21,25 @@ import com.mqt.pojo.vo.ValueVo;
 public class DominanceAnalyzer {
 
 	/**
+	 * Injection of dependencies
+	 */
+	@Autowired
+	private InstancesByDeviationComparator comparator; 
+	
+	/**
 	 * Résultat de l'analyse pour une heuristique
 	 * @param h
 	 * @return
 	 */
 	public DominanceDto analyze(HeuristicVo h, Integer total) {
 		DominanceDto d = new DominanceDto();
+		d.getValues().add(new InstancesByDeviationDto().setDeviation(0).setInstances(0));
 		for(ValueVo v : h.getValues()) {
 			Integer deviation = getPourcentageByNumber(v.getValue() - v.getInstance().getOptimal(), v.getInstance().getOptimal());
-			addAtPlace(deviation ,d.getValues());
+			d.setValues(addAtPlace(deviation ,d.getValues()));
 		}
-		return d.setH(h.setValues(null)).setValues(changePercentage(d.getValues(), total));
+		Collections.sort(d.getValues(), comparator);
+		return d.setH(h.setValues(null));//.setValues(changePercentage(d.getValues(), total));
 	}
 
 	/**
@@ -35,19 +47,23 @@ public class DominanceAnalyzer {
 	 * @param d
 	 * @param values
 	 */
-	public void addAtPlace(Integer d, List<InstancesByDeviationDto> values) {
+	public List<InstancesByDeviationDto> addAtPlace(Integer d, List<InstancesByDeviationDto> values) {
 		boolean isPresent = false;
+		Integer valueToPlace = 1;
 		for(InstancesByDeviationDto v : values) {
 			if(v.getDeviation() >= d) {
 				v.setInstances(v.getInstances() + 1);
 				if(v.getDeviation().equals(d)) {
 					isPresent = true;
 				}
+			} else {
+				valueToPlace++;
 			}
 		}
 		if(!isPresent) {
-			values.add(new InstancesByDeviationDto().setDeviation(d).setInstances(1));
+			values.add(new InstancesByDeviationDto().setDeviation(d).setInstances(valueToPlace));
 		}
+		return values;
 	}
 	
 	/**
