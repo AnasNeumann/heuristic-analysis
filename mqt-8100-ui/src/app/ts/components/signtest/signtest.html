@@ -1,1 +1,69 @@
-<div class="mqt-title">Test de signe</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-title">Test des rangs pondérés de Wilcoxon</div>
+		</div>
+		
+		<!-- TABLEAUX -->
+		<div class="col col-lg-5 col-md-6 col-sm-12 col-xs-12">
+			<div class="row">
+				<div *ngFor="let h of heuristics" class="col col-lg-12 col-md-12 col-sm-6 col-xs-12">
+					<div class="mqt-back-white">
+				      <div class="mqt-home-title">Tests de : <b>{{h.h}}</b></div>
+				      <div class="mqt-padding-15 mqt-home-form">
+				      		<div class="table-responsive">
+					        	<table class="table table-striped">
+							         <thead>
+							             <tr>
+							                 <th>Heuristique</th>
+							                 <th>Valeur du test</th>							                 
+							                 <th>alpha choisi</th>
+							                 <th>Y+ trouvé</th>
+							             </tr>
+							        </thead>
+							        <tbody>
+							        	<tr *ngFor="let t of h.tests" class="mqt-home-ligne">
+							        		<td>{{t.name}}</td>
+							        		<td>{{t.value}}</td>
+							        		<td>{{t.alpha}}</td>
+							        		<td>{{t.ymax}}</td>
+							        	</tr>
+							        </tbody>
+							     </table>
+							</div>
+				      </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- GRAPHIQUE -->
+		<div class="col col-lg-7 col-md-6 col-sm-12 col-xs-12">
+			<div *ngIf="loaded" class="mqt-average-height">
+				<div class="mqt-title">Nombre total de rejets de Ho</div>
+				<ngx-charts-bar-vertical
+					  [scheme]="colorScheme"
+					  [results]="data"
+					  [gradient]="gradient"
+					  [xAxis]="showXAxis"
+					  [yAxis]="showYAxis"
+					  [legend]="showLegend"
+					  [showXAxisLabel]="showXAxisLabel"
+					  [showYAxisLabel]="showYAxisLabel"
+					  [xAxisLabel]="xAxisLabel"
+					  [yAxisLabel]="yAxisLabel">
+				</ngx-charts-bar-vertical>
+			</div>
+			<div>
+				<div class="mqt-title">Ordre partiel (déduction)</div>
+				<div class="table-responsive">
+		        	<table class="table table-striped">
+		        		<tr *ngFor="let o of order">
+		        			<td><b>{{o.inf}}</b> < <b>{{o.sup}}</b></td>
+				        </tr>
+				     </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

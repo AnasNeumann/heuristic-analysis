@@ -16,9 +16,15 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 @Component({
   selector: 'mqt-sign',
   templateUrl: 'signTest.html',
-  styleUrls: ['signTest.css']
+  styleUrls: ['signTest.css', '../home/home.css', '../averagetest/averageTest.css']
 })
 export class SignTest extends GenericComponent {
+    loaded : boolean = false;
+    data : any[] = [];
+    order : any[] = [];
+    heuristics : any[] = [];
+    xAxisLabel = "Heursitiques";
+    yAxisLabel = "Total rejets de Ho";
 
     /**
      * Constructor
@@ -27,6 +33,27 @@ export class SignTest extends GenericComponent {
      */
      constructor(private modalService: BsModalService, private service : WebService, private messageService : MessageService, private renderer: Renderer, private localService : LocalService) {       
         super(messageService, renderer, localService);
+        this.service.get("/analyzer/sign", {}).then(response =>{
+            for(var h in response.many){
+                var newValue = {
+                      name : response.many[h].h,
+                      value : 0
+                };
+                for(var t in response.many[h].tests){
+                    var result = response.many[h].tests[t];
+                    if(result.value >= result.ymax){
+                        newValue.value ++;
+                        this.order.push({
+                           inf : response.many[h].h,
+                           sup : result.name
+                        });
+                    }
+                }
+                this.data.push(newValue);
+            }
+            this.heuristics = response.many;
+            this.loaded = true;
+        });
      }
 
 }
