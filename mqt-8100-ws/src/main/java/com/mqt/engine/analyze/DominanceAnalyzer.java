@@ -35,7 +35,7 @@ public class DominanceAnalyzer extends GenericAnalyzer{
 		DominanceDto d = new DominanceDto();
 		d.getValues().add(new InstancesByDeviationDto().setDeviation(0).setInstances(0));
 		for(ValueVo v : h.getValues()) {
-			Integer deviation = getPourcentageByNumber(v.getValue() - v.getInstance().getOptimal(), v.getInstance().getOptimal());
+			Integer deviation = getPourcentageByNumber(getDeviation(v), v.getInstance().getOptimal());
 			d.setValues(addAtPlace(deviation ,d.getValues()));
 		}
 		Collections.sort(d.getValues(), comparator);

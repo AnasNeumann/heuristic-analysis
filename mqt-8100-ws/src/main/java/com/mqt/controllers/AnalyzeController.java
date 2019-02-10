@@ -17,11 +17,14 @@ import com.mqt.boot.Constantes;
 import com.mqt.engine.analyze.DominanceAnalyzer;
 import com.mqt.engine.analyze.EvaluationCriteriaAnalyzer;
 import com.mqt.engine.analyze.StudentTestAnalyzer;
+import com.mqt.engine.analyze.WilcoxonWeightedRankAnalyzer;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.dto.AverageStudentTestDto;
 import com.mqt.pojo.dto.CriteriaDto;
 import com.mqt.pojo.dto.DominanceDto;
 import com.mqt.pojo.dto.SingleAverageStudentTestDto;
+import com.mqt.pojo.dto.SingleWilcoxonTestDto;
+import com.mqt.pojo.dto.WilcoxonTestDto;
 import com.mqt.pojo.vo.HeuristicVo;
 
 /**
@@ -41,9 +44,11 @@ public class AnalyzeController extends GenericController {
 	@Autowired
 	EvaluationCriteriaAnalyzer ECAnalyzer;
 	@Autowired
-	DominanceAnalyzer dAnalyzer;
+	DominanceAnalyzer DAnalyzer;
 	@Autowired
 	StudentTestAnalyzer STAnalyzer;
+	@Autowired
+	WilcoxonWeightedRankAnalyzer WWRAnalyzer;
 	
 	/**
 	 * Analyze réalisée sur la base des critères d'évaluation de la performance
@@ -72,13 +77,13 @@ public class AnalyzeController extends GenericController {
 		List<DominanceDto> result = new ArrayList<DominanceDto>();
 		Integer total = instanceService.getAll().size();
 		for(HeuristicVo h : heuristicService.getAll()) {
-			result.add(dAnalyzer.analyze(h, total));
+			result.add(DAnalyzer.analyze(h, total));
 		}
 		return many(result);
 	}
 	
 	/**
-	 * Analyze des tests de moyenne (student, a=5%)
+	 * Analyze des tests de moyenne
 	 * @param request
 	 * @return
 	 */
@@ -96,6 +101,29 @@ public class AnalyzeController extends GenericController {
 				}
 			}
 			result.add(new AverageStudentTestDto().setH(h1.getName()).setTests(tests));
+		}
+		return many(result);
+	}
+	
+	/**
+	 * Analyze des tests des rangs pondérés de Wilcoxon
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/analyzer/wilcoxon", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
+	public ResponseEntity<Response> WeightedRankWilcoxonAnalyze(HttpServletRequest request) {
+		List<WilcoxonTestDto> result = new ArrayList<WilcoxonTestDto>();
+		Integer total = instanceService.getAll().size();
+		List<HeuristicVo> heuristics = heuristicService.getAll();
+		for(HeuristicVo h1 : heuristics) {
+			List<SingleWilcoxonTestDto> tests = new ArrayList<SingleWilcoxonTestDto>();
+			for(HeuristicVo h2 : heuristics) {
+				if(!h1.getId().equals(h2.getId())) {
+					tests.add(WWRAnalyzer.analyze(h1, h2, total));
+				}
+			}
+			result.add(new WilcoxonTestDto().setH(h1.getName()).setTests(tests));
 		}
 		return many(result);
 	}

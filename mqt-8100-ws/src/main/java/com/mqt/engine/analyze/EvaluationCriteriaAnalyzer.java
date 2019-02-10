@@ -39,10 +39,11 @@ public class EvaluationCriteriaAnalyzer extends GenericAnalyzer{
 		for(ValueVo v : h.getValues()) {
 			boolean isWorst = true;
 			Integer nbrOptimal = 0;
-			deviations.add(v.getValue() - v.getInstance().getOptimal());
-			averageDeviation += v.getValue() - v.getInstance().getOptimal();
-			if(v.getValue() - v.getInstance().getOptimal() > maxDeviation) {
-				maxDeviation = v.getValue() - v.getInstance().getOptimal();
+			int d = getDeviation(v);
+			deviations.add(d);
+			averageDeviation += d;
+			if(d > maxDeviation) {
+				maxDeviation = d;
 			}
 			for(ValueVo value : vService.searchByInstanceId(v.getInstance().getId(), max)){
 				if(value.getValue().equals(v.getInstance().getOptimal())){
