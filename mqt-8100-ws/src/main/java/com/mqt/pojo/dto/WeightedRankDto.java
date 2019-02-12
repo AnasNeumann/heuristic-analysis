@@ -12,7 +12,7 @@ import com.mqt.pojo.AbstractResource;
 public class WeightedRankDto extends AbstractResource {
 	private static final long serialVersionUID = 1L;
 	private Integer sign;
-	private Integer abs;
+	private Double abs;
 
 	/**
 	 * @return the sign
@@ -33,7 +33,7 @@ public class WeightedRankDto extends AbstractResource {
 	/**
 	 * @return the abs
 	 */
-	public Integer getAbs() {
+	public Double getAbs() {
 		return abs;
 	}
 
@@ -41,7 +41,7 @@ public class WeightedRankDto extends AbstractResource {
 	 * @param abs
 	 *            the abs to set
 	 */
-	public WeightedRankDto setAbs(Integer abs) {
+	public WeightedRankDto setAbs(Double abs) {
 		this.abs = abs;
 		return this;
 	}

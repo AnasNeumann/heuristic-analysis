@@ -33,9 +33,9 @@ public class DominanceAnalyzer extends GenericAnalyzer{
 	 */
 	public DominanceDto analyze(HeuristicVo h, Integer total) {
 		DominanceDto d = new DominanceDto();
-		d.getValues().add(new InstancesByDeviationDto().setDeviation(0).setInstances(0));
+		d.getValues().add(new InstancesByDeviationDto().setDeviation(0.0).setInstances(0));
 		for(ValueVo v : h.getValues()) {
-			Integer deviation = getPourcentageByNumber(getDeviation(v), v.getInstance().getOptimal());
+			Double deviation = getDeviation(v)*100;
 			d.setValues(addAtPlace(deviation ,d.getValues()));
 		}
 		Collections.sort(d.getValues(), comparator);
@@ -47,9 +47,9 @@ public class DominanceAnalyzer extends GenericAnalyzer{
 	 * @param d
 	 * @param values
 	 */
-	public List<InstancesByDeviationDto> addAtPlace(Integer d, List<InstancesByDeviationDto> values) {
+	public List<InstancesByDeviationDto> addAtPlace(Double d, List<InstancesByDeviationDto> values) {
 		boolean isPresent = false;
-		InstancesByDeviationDto maxInf = new InstancesByDeviationDto().setDeviation(0).setInstances(0);
+		InstancesByDeviationDto maxInf = new InstancesByDeviationDto().setDeviation(0.0).setInstances(0);
 		for(InstancesByDeviationDto v : values) {
 			if(v.getDeviation() >= d) {
 				v.setInstances(v.getInstances() + 1);

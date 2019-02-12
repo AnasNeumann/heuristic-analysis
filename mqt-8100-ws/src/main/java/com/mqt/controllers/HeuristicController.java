@@ -41,7 +41,7 @@ public class HeuristicController extends GenericController {
 	
 	/**
 	 * get All heuristics
-	 * 
+
 	 * @param request
 	 * @return
 	 */

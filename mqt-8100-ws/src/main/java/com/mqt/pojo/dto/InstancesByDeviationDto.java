@@ -12,7 +12,7 @@ import com.mqt.pojo.AbstractResource;
 public class InstancesByDeviationDto extends AbstractResource {
 	private static final long serialVersionUID = 1L;
 	private Integer instances;
-	private Integer deviation;
+	private Double deviation;
 
 	/**
 	 * @return the instances
@@ -33,7 +33,7 @@ public class InstancesByDeviationDto extends AbstractResource {
 	/**
 	 * @return the deviation
 	 */
-	public Integer getDeviation() {
+	public Double getDeviation() {
 		return deviation;
 	}
 
@@ -41,7 +41,7 @@ public class InstancesByDeviationDto extends AbstractResource {
 	 * @param deviation
 	 *            the deviation to set
 	 */
-	public InstancesByDeviationDto setDeviation(Integer deviation) {
+	public InstancesByDeviationDto setDeviation(Double deviation) {
 		this.deviation = deviation;
 		return this;
 	}

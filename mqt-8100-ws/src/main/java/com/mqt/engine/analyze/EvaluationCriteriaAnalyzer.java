@@ -33,13 +33,13 @@ public class EvaluationCriteriaAnalyzer extends GenericAnalyzer{
 	 */
 	public CriteriaDto analyze(HeuristicVo h, Integer max) {
 		CriteriaDto c = new CriteriaDto();
-		Integer maxDeviation = 0;
+		Double maxDeviation = 0.0;
 		Double averageDeviation = 0.0;
-		List<Integer> deviations = new ArrayList<Integer>();
+		List<Double> deviations = new ArrayList<Double>();
 		for(ValueVo v : h.getValues()) {
 			boolean isWorst = true;
 			Integer nbrOptimal = 0;
-			int d = getDeviation(v);
+			double d = getDeviation(v);
 			deviations.add(d);
 			averageDeviation += d;
 			if(d > maxDeviation) {

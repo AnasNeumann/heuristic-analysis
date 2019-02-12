@@ -17,9 +17,9 @@ public class GenericAnalyzer {
 	 * @param averageDeviation
 	 * @return
 	 */
-	protected Double standardDeviation(List<Integer> deviations, Double averageDeviation) {
+	protected Double standardDeviation(List<Double> deviations, Double averageDeviation) {
 		Double sd = 0.0;
-		for(Integer d : deviations) {
+		for(Double d : deviations) {
 			sd += Math.pow(d - averageDeviation, 2);
 		}
 		return Math.sqrt(sd/deviations.size());	
@@ -30,8 +30,8 @@ public class GenericAnalyzer {
 	 * @param v
 	 * @return
 	 */
-	protected Integer getDeviation(ValueVo v) {
-		return v.getValue() - v.getInstance().getOptimal();
+	protected double getDeviation(ValueVo v) {
+		return ((double) v.getValue() - v.getInstance().getOptimal())/ v.getInstance().getOptimal();
 	}
 
 }

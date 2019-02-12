@@ -15,7 +15,7 @@ public class SingleWilcoxonTestDto extends AbstractResource {
 	private String name;
 	private Integer w95;
 	private Integer w99;
-	private Integer value;
+	private Double value;
 
 	/**
 	 * @return the name
@@ -68,7 +68,7 @@ public class SingleWilcoxonTestDto extends AbstractResource {
 	/**
 	 * @return the value
 	 */
-	public Integer getValue() {
+	public Double getValue() {
 		return value;
 	}
 
@@ -76,7 +76,7 @@ public class SingleWilcoxonTestDto extends AbstractResource {
 	 * @param value
 	 *            the value to set
 	 */
-	public SingleWilcoxonTestDto setValue(Integer value) {
+	public SingleWilcoxonTestDto setValue(Double value) {
 		this.value = value;
 		return this;
 	}

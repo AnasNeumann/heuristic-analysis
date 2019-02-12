@@ -17,7 +17,7 @@ public class CriteriaDto extends AbstractResource {
 	private Integer nbrOptimal = 0;
 	private Integer optimalAlone = 0;
 	private Double averageDeviation = 0.0;
-	private Integer maxDeviation = 0;
+	private Double maxDeviation = 0.0;
 	private Double standardDeviation = 0.0;
 
 	/**
@@ -103,7 +103,7 @@ public class CriteriaDto extends AbstractResource {
 	/**
 	 * @return the maxDeviation
 	 */
-	public Integer getMaxDeviation() {
+	public Double getMaxDeviation() {
 		return maxDeviation;
 	}
 
@@ -111,7 +111,7 @@ public class CriteriaDto extends AbstractResource {
 	 * @param maxDeviation
 	 *            the maxDeviation to set
 	 */
-	public CriteriaDto setMaxDeviation(Integer maxDeviation) {
+	public CriteriaDto setMaxDeviation(Double maxDeviation) {
 		this.maxDeviation = maxDeviation;
 		return this;
 	}

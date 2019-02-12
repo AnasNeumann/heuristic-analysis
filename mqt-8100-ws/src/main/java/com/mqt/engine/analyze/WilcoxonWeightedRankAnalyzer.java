@@ -44,11 +44,21 @@ public class WilcoxonWeightedRankAnalyzer extends GenericAnalyzer {
 	 */
 	public SingleWilcoxonTestDto analyze(HeuristicVo h1, HeuristicVo h2, Integer n) {
 		SingleWilcoxonTestDto result = new SingleWilcoxonTestDto().setName(h2.getName());
-		Integer sum = 0;
+		Double sum = 0.0;
 		int rank = 1;
-		for(WeightedRankDto r : getWeightedRank(h1, h2, n)) {
-			sum += r.getSign() * rank;
-			rank++;
+		List<WeightedRankDto> results = getWeightedRank(h1, h2, n);
+		for(int i=0; i<results.size(); i++) {
+			if(!results.get(i).getAbs().equals(0)) {
+				if(i>0 && results.get(i).getAbs().equals(results.get(i-1).getAbs())){
+					sum += results.get(i).getSign() * (rank+0.5);
+					rank+=2;
+				} else if(i<(results.size() - 1) && results.get(i).getAbs().equals(results.get(i+1).getAbs())) {
+					sum += results.get(i).getSign() * (rank+0.5);
+				} else {
+					sum += results.get(i).getSign() * rank;
+					rank++;
+				}
+			}
 		}
 		return result.setValue(sum).setW95(criticalValue().get(PERCENTAGE_95).get(n)).setW99(criticalValue().get(PERCENTAGE_99).get(n));
 	}
@@ -62,8 +72,8 @@ public class WilcoxonWeightedRankAnalyzer extends GenericAnalyzer {
 	public List<WeightedRankDto> getWeightedRank(HeuristicVo h1, HeuristicVo h2, Integer n){
 		List<WeightedRankDto> result = new ArrayList<WeightedRankDto>();
 		for(int i=0; i<n; i++) {
-			int d1 = getDeviation(h1.getValues().get(i));
-			int d2 = getDeviation(h2.getValues().get(i));
+			double d1 = getDeviation(h1.getValues().get(i));
+			double d2 = getDeviation(h2.getValues().get(i));
 			int sign = (d1 - d2 > 0)? 1 : -1;
 			result.add(new WeightedRankDto().setAbs(Math.abs(d1 - d2)).setSign(sign));
 		}

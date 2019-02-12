@@ -48,9 +48,9 @@ public class StudentTestAnalyzer extends GenericAnalyzer {
 	public Map<String, Double> getAverageAndStandardVariance(HeuristicVo h){
 		Map<String, Double> result = new HashMap<String,Double>();
 		Double totalDeviation = 0.0;
-		List<Integer> deviations = new ArrayList<Integer>();
+		List<Double> deviations = new ArrayList<Double>();
 		for(ValueVo v : h.getValues()) {
-			int d = getDeviation(v);
+			double d = getDeviation(v);
 			totalDeviation += d;
 			deviations.add(d);
 		}
