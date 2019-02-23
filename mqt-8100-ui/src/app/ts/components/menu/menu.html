@@ -6,6 +6,7 @@
 			(expanded)="setHeight(database, 0);setHeight(database, database.scrollHeight)" 
 			#database>
 			<div routerLink="/home" class="mqt-menu-choice">Gestion des résultats</div>
+			<div routerLink="/estimate" class="mqt-menu-choice">Gestion des estimations</div>
 		</div>
 		
 		<div (click)="open = 2" class="mqt-menu-btn"><span class="mqt-menu-ico"><i class="fa fa-bar-chart" aria-hidden="true"></i></span> Module d'analyse</div>
@@ -16,8 +17,8 @@
 			<div routerLink="/criteria" class="mqt-menu-choice">Critères d'évaluation</div>
 			<div routerLink="/dominance" class="mqt-menu-choice">Analyse de la dominance</div>
 			<div routerLink="/wilcoxon" class="mqt-menu-choice">Rangs pondérés de Wilcoxon</div>
-			<div routerLink="/signtest" class="mqt-menu-choice">Test de signe</div>
-			<div routerLink="/averagetest" class="mqt-menu-choice">Test des moyennes</div>
+			<div routerLink="/signTest" class="mqt-menu-choice">Test de signe</div>
+			<div routerLink="/averageTest" class="mqt-menu-choice">Test des moyennes</div>
 		</div>
 		
 		<div (click)="open = 3" class="mqt-menu-btn"><span class="mqt-menu-ico"><i class="fa fa-connectdevelop" aria-hidden="true"></i></span> Module de résolution</div>
@@ -25,5 +26,6 @@
 			(collapsed)="setHeight(solve, 0)" 
 			(expanded)="setHeight(solve, 0);setHeight(solve, solve.scrollHeight)" 
 			#solve>
+			<div routerLink="boundGenerator" class="mqt-menu-choice">Génération de bornes</div>
 		</div>
 </div>

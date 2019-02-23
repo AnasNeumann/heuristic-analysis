@@ -23,7 +23,7 @@ import com.mqt.specifications.EstimateSpecification;
  * @since 23/02/2019
  * @verion 1.0
  */
-@Service("instanceService")
+@Service("estimateService")
 public class EstimateService extends GenericCrudService<EstimateCriteria, EstimateVo, EstimateEntity> {
 	private static final long serialVersionUID = 1L;
 

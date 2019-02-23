@@ -19,6 +19,8 @@ import { Menu } from './ts/components/menu/Menu';
 import { SignTest } from './ts/components/signtest/SignTest';
 import { Wilcoxon } from './ts/components/wilcoxon/Wilcoxon';
 import { AverageTest } from './ts/components/averagetest/AverageTest';
+import { Estimate } from './ts/components/estimate/Estimate';
+import { Bound } from './ts/components/bound/Bound';
 
 // OTHER IMPORTS
 import { Routing } from './Routing';
@@ -38,7 +40,9 @@ import { EffectService } from './ts/services/EffectService';
     Menu,
     SignTest,
     Wilcoxon,
-    AverageTest
+    AverageTest,
+    Estimate,
+    Bound
   ],
   imports: [
     CommonModule,

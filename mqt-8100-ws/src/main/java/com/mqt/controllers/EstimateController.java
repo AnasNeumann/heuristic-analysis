@@ -6,17 +6,30 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mqt.boot.Constantes;
 import com.mqt.comparators.EstimateComparator;
+import com.mqt.engine.estimate.BoundEstimator;
+import com.mqt.engine.estimate.IndependenceTest;
+import com.mqt.engine.estimate.KolmogorovTest;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.vo.EstimateVo;
 import com.mqt.services.EstimateService;
 
+/**
+ * Controller pour la gestion des estimation
+ * @author Anas Neumann <anas.neumann.isamm@gmail.com>
+ * @version 1.0
+ * @since /02/2019
+ */
+@CrossOrigin
+@RestController
 public class EstimateController extends GenericController {
 
 	/**
@@ -26,6 +39,12 @@ public class EstimateController extends GenericController {
 	private EstimateService estimateSerivce;
 	@Autowired
 	private EstimateComparator compartor;
+	@Autowired
+	private KolmogorovTest kolmogorovTest;
+	@Autowired
+	private IndependenceTest independenceTest;
+	@Autowired
+	private BoundEstimator boundEstimator;
 
 	/**
 	 * get all estimate
@@ -73,36 +92,13 @@ public class EstimateController extends GenericController {
 	}
 	
 	/**
-	 * Test of independences
+	 * Test of independences, kolmogorov and generate bound
 	 * @param request
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/estimate/independence", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
+	@RequestMapping(value = "/engine/estimate", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> testIndependence(HttpServletRequest request) {
 		return refuse();
 	}
-	
-	/**
-	 * Test of kolmogorov
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/estimate/kolmogorov", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
-	public ResponseEntity<Response> testKolmogorov(HttpServletRequest request) {
-		return refuse();
-	}
-	
-	/**
-	 * Estimate the bound
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/estimate/bound", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
-	public ResponseEntity<Response> estimateBound(HttpServletRequest request) {
-		return refuse();
-	}
-
 }

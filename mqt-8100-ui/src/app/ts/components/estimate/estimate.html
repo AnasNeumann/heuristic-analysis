@@ -1,0 +1,48 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-title">Gestion des estimations aléatoires</div>
+		</div>
+		
+		<!-- FORM ESTIMATE -->
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-back-white">
+				<div class="mqt-home-title">Nouvelle estimation</div>
+				<div class="mqt-padding-15 mqt-home-form">
+				    <mat-input-container>
+					  <input matInput placeholder="Valeur obtenue" [(ngModel)]="form.value" />
+					</mat-input-container>
+					<div class="mqt-align-right"><button (click)="create()" mat-button>Créer</button></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- TABLE -->
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-home-redHeader"></div>
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="table-responsive">
+		        	<table class="table table-striped">
+				         <thead>
+				             <tr>
+				                 <th class="mqt-align-left">Id</th>
+				                 <th class="mqt-align-left">Valeur obtenue</th>
+				                 <th class="mqt-align-left">Date d'ajout</th>
+				                 <th class="mqt-align-left">Action</th>
+				             </tr>
+				        </thead>
+				        <tbody>
+				        	<tr *ngFor="let e of estimates" class="mqt-home-ligne">
+				        		 <td>{{e.id}}</td>
+				        		 <td>{{e.value}}</td>
+				        		 <td>{{e.timestamps | date : "dd/MM/y" }}</td>
+				        		 <td><span (click)="delete(e)" tooltip="Supprimer la valeure" placement="left" class="mqt-home-delete"><i class="fa fa-trash" aria-hidden="true" ></i></span></td>
+				        	</tr>
+				        </tbody>
+			        </table>
+		        </div>
+	        </div>
+        </div>
+		
+	</div>
+</div>
