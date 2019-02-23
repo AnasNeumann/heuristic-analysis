@@ -29,7 +29,7 @@ import com.mqt.pojo.vo.InstanceVo;
 public class InstanceController extends GenericController {
 
 	/**
-	 * get All instances
+	 * get all instances
 	 * 
 	 * @param request
 	 * @return

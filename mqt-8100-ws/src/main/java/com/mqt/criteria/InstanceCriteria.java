@@ -28,5 +28,4 @@ public class InstanceCriteria extends AbstractResource implements Criteria {
 		this.optimal = optimal;
 		return this;
 	}
-
 }

@@ -40,6 +40,9 @@ public class GenericDeleteService extends GenericService {
 	@Autowired
 	protected InstanceRepository instanceRepository;
 	
+	@Autowired
+	protected EstimateRepository estimateRepository;
+
 	/**
 	 * Les services
 	 */
@@ -49,6 +52,16 @@ public class GenericDeleteService extends GenericService {
 	@Autowired
 	protected ValueService valueService;
 	
+	/**
+	 * cascade delete a estimate
+	 * @param estimate
+	 */
+	@Modifying
+	@Transactional
+	public void cascade(EstimateVo estimate) {
+		estimateRepository.delete(estimate.getId());
+	}
+
 	/**
 	 * cascade delete a value
 	 * @param value
