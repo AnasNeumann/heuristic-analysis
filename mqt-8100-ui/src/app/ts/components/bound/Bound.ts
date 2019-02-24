@@ -20,6 +20,10 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 })
 export class Bound extends GenericComponent {
     loaded : boolean = false;
+    b : any = {};
+    i : any = {};
+    k : any = {};
+    wins  : any[] = [];
 
     /**
      * Constructor
@@ -28,6 +32,23 @@ export class Bound extends GenericComponent {
      */
      constructor(private modalService: BsModalService, private service : WebService, private messageService : MessageService, private renderer: Renderer, private localService : LocalService) {       
         super(messageService, renderer, localService);
+        var win : number = 0, fail : number = 2;
+        this.service.get("/engine/estimate", {}).then(response =>{
+            this.b = response.one.bound;
+            this.i = response.one.independence;
+            this.k = response.one.kolmogorov;
+            if(this.i.success){
+                win++;
+                fail--;
+            }
+            if(this.k.success){
+                win++;
+                fail--;
+            }
+            this.wins.push({"name" : "Tests réussis", "value" : win});
+            this.wins.push({"name" : "Tests échoués", "value" : fail});
+            this.loaded = true;
+        });
      }
 
 }

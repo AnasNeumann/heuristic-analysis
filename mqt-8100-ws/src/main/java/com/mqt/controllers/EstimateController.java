@@ -1,6 +1,7 @@
 package com.mqt.controllers;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mqt.boot.Constantes;
-import com.mqt.comparators.EstimateComparator;
 import com.mqt.engine.estimate.BoundEstimator;
 import com.mqt.engine.estimate.IndependenceTest;
 import com.mqt.engine.estimate.KolmogorovTest;
 import com.mqt.pojo.Response;
+import com.mqt.pojo.dto.BoundDto;
+import com.mqt.pojo.dto.EstimateDto;
 import com.mqt.pojo.vo.EstimateVo;
 import com.mqt.services.EstimateService;
 
@@ -37,8 +39,6 @@ public class EstimateController extends GenericController {
 	 */
 	@Autowired
 	private EstimateService estimateSerivce;
-	@Autowired
-	private EstimateComparator compartor;
 	@Autowired
 	private KolmogorovTest kolmogorovTest;
 	@Autowired
@@ -92,13 +92,19 @@ public class EstimateController extends GenericController {
 	}
 	
 	/**
-	 * Test of independences, kolmogorov and generate bound
+	 * Tests of independences, kolmogorov and generate bound
 	 * @param request
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/engine/estimate", method = RequestMethod.GET, produces = Constantes.MIME_JSON)
-	public ResponseEntity<Response> testIndependence(HttpServletRequest request) {
-		return refuse();
+	public ResponseEntity<Response> generateBound(HttpServletRequest request) {
+		List<EstimateVo> estimates = estimateSerivce.getAll();
+		BoundDto bound = boundEstimator.generate(estimates);
+		EstimateDto result = new EstimateDto()
+				.setIndependence(independenceTest.generate(estimates))
+				.setBound(bound)
+				.setKolmogorov(kolmogorovTest.generate(estimates, bound));
+		return one(result);
 	}
 }

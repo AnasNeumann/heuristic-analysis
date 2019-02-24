@@ -3,6 +3,113 @@
 		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="mqt-title">Generation d'une borne</div>
 		</div>
-		
+
+		<!-- Résultats : borne inf et intervale de confiance -->
+		<div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="mqt-home-redHeader"></div>
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="table-responsive">
+		        	<table class="table table-striped">
+				         <thead>
+				             <tr>
+				                 <th>Résultat de la génération de borne</th>
+				             </tr>
+				        </thead>
+				        <tbody>
+				        	<tr class="mqt-home-ligne">
+				        		<td>Borne inferieure (A)</td>
+				        		<td>{{b.a}}</td>
+				        	</tr>
+				        	<tr class="mqt-home-ligne">
+				        		<td>Interval de confiance</td>
+				        		<td>[{{b.min}}, {{b.max}}]</td>
+				        	</tr>
+				        	<tr class="mqt-home-ligne">
+				        		<td>B</td>
+				        		<td>{{b.b}}</td>
+				        	</tr>
+				        	<tr class="mqt-home-ligne">
+				        		<td>C</td>
+				        		<td>{{b.c}}</td>
+				        	</tr>
+				        </tbody>
+				     </table>
+				</div>
+			</div>
+
+			<div *ngIf="loaded" class="mqt-boundGraph">
+				<div class="mqt-title">Réussite des tests</div>
+			 	<ngx-charts-pie-chart
+	      			[results]="wins"
+	      			[scheme]="colorScheme"
+	      			[legend]="showLegend"
+	      			[explodeSlices]="explodeSlices"
+	      			[labels]="showLabels"
+	      			[doughnut]="doughnut"
+	      			[gradient]="gradient">
+			    </ngx-charts-pie-chart>	
+		    </div>
+		</div>
+
+		<div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="row">
+
+				<!-- TEST D'INDEPENDANCE -->
+				<div class="col col-lg-12 col-md-12 col-sm-6 col-xs-12">
+					<div class="mqt-back-white">
+				      <div class="mqt-home-title">Test d'indépendance des données</div>
+				      <div class="mqt-padding-15 mqt-home-form">
+				      	<div class="table-responsive">
+				        	<table class="table table-striped">
+						        <tbody>
+						        	<tr class="mqt-home-ligne">
+						        		<td>Nombre de suites</td>
+						        		<td>{{i.nbrSequences}}</td>
+						        	</tr>
+						        	<tr class="mqt-home-ligne">
+						        		<td>Ecart type</td>
+						        		<td>{{i.standardDeviation}}</td>
+						        	</tr>
+						        	<tr class="mqt-home-ligne">
+						        		<td>Deviation moyenne</td>
+						        		<td>{{i.averageSequenceNbr}}</td>
+						        	</tr>
+						        	<tr class="mqt-home-ligne">
+						        		<td>Z</td>
+						        		<td>{{i.z}}</td>
+						        	</tr>
+						        </tbody>
+						     </table>
+						</div>
+						<div *ngIf="i.success" class="mqt-ok"><span tooltip="Test réussi !" placement="top"><i  class="fa fa-check-circle" aria-hidden="true"></i></span></div>
+				      </div>
+			      </div>
+		        </div>
+
+		       <!-- TEST DE KOLMOGOROV -->
+		       <div class="col col-lg-12 col-md-12 col-sm-6 col-xs-12">
+					<div class="mqt-back-white">
+				      <div class="mqt-home-title">Test de Kolmogorov (Weibull)</div>
+				      <div class="mqt-padding-15 mqt-home-form">
+				      	<div class="table-responsive">
+				        	<table class="table table-striped">
+						        <tbody>
+						        	<tr class="mqt-home-ligne">
+						        		<td>T max</td>
+						        		<td>{{k.t}}</td>
+						        	</tr>
+						        	<tr class="mqt-home-ligne">
+						        		<td>W (Alpha = 5%)</td>
+						        		<td>{{k.w}}</td>
+						        	</tr>
+						        </tbody>
+						     </table>
+						</div>
+						<div *ngIf="k.success" class="mqt-ok"><span tooltip="Test réussi !" placement="top"><i  class="fa fa-check-circle" aria-hidden="true"></i></span></div>
+				      </div>
+			      </div>
+		       </div>
+	      </div>
+		</div>
 	</div>
 </div>

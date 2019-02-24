@@ -1,1 +1,15 @@
 @charset "UTF-8";
+
+.mqt-ok{
+	font-size : 50px;
+	color : #04ae48;
+	text-align: center;
+}
+
+.mqt-ok span{
+	cursor : pointer;
+}
+
+.mqt-boundGraph{
+	min-height : 250px;
+}
