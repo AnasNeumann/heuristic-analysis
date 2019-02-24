@@ -70,13 +70,11 @@ public class IndependenceTest extends GenericEstimatorEngine {
 					total++;
 					mode = true;
 				}
-				System.out.println("- : "+e.getValue()+" <= "+mediane);
 			} else if( e.getValue() > mediane) {
 				if(mode == true) {
 					total++;
 					mode = false;
 				}
-				System.out.println("+ : "+e.getValue()+" > "+mediane);
 			}
 		}
 		return total;

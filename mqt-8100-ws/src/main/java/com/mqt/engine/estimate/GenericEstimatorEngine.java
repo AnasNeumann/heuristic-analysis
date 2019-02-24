@@ -32,6 +32,6 @@ public class GenericEstimatorEngine {
 		if(estimates.size() % 2 != 0) {
 			return new Double(estimates.get(Math.floorDiv(estimates.size(), 2)).getValue());
 		}
-		return new Double((estimates.get(Math.floorDiv(estimates.size(),2)).getValue() + estimates.get(Math.floorDiv(estimates.size(),2)+1).getValue()) / 2.00);
+		return new Double((estimates.get((estimates.size()/2)-1).getValue() + estimates.get((estimates.size()/2)).getValue()) / 2.00);
 	}
 }

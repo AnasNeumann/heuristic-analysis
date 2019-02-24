@@ -50,7 +50,8 @@ public class KolmogorovTest extends GenericEstimatorEngine {
 		Collections.sort(estimates, comparatorByValue);
 		for(int i = 0; i<estimates.size(); i++) {
 			Integer value = estimates.get(i).getValue();
-			result.add(Math.abs(Weibull(value, bound) - ((i+1.00)/estimates.size())));
+			Double j = new Double(i);
+			result.add(Math.abs(Weibull(value, bound) - (j/estimates.size())));
 		}
 		return result;
 	}
