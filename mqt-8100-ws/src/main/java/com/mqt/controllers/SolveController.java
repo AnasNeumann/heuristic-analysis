@@ -1,5 +1,7 @@
 package com.mqt.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mqt.boot.Constantes;
-import com.mqt.engine.heuristics.GenericHeuristic;
 import com.mqt.engine.heuristics.flowshop.CDSHeuristic;
+import com.mqt.engine.heuristics.flowshop.GenericFlowShopHeuristic;
 import com.mqt.engine.heuristics.flowshop.NEHHeuristic;
 import com.mqt.engine.heuristics.flowshop.PalmerHeuristic;
 import com.mqt.pojo.Response;
+import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 
 /**
  * Controller pour la résolution à l'aide heuristiques
@@ -31,8 +34,6 @@ public class SolveController extends GenericController {
 	 * Injection of dependencies
 	 */
 	@Autowired
-	private GenericHeuristic genericHeuristic;
-	@Autowired
 	private NEHHeuristic nehHeuristic;
 	@Autowired
 	private CDSHeuristic cdsHeuristic;
@@ -47,7 +48,8 @@ public class SolveController extends GenericController {
 	@ResponseBody
 	@RequestMapping(value = "/solve/flowshop", headers = "Content-Type= multipart/form-data", method = RequestMethod.POST, produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> flowshop(HttpServletRequest request) {
-		return refuse();
+		List<FlowShopInstanceDto> instances = GenericFlowShopHeuristic.parse(request.getParameter("file"));
+		return many(instances);
 	}
 	
 }

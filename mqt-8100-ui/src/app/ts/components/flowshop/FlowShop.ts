@@ -23,6 +23,7 @@ export class FlowShop extends GenericComponent {
     form : any = {
             file : ""
     }
+    instances : any[] = [];
 
     /**
      * Constructor
@@ -44,7 +45,7 @@ export class FlowShop extends GenericComponent {
         reader.onload = function(e : any){
             that.form.file = e.target.result;
             that.service.upload("/solve/flowshop", that.form).then(response =>{
-                console.log(response);
+                that.instances = response.many;
             });
         }
         reader.readAsText(file);

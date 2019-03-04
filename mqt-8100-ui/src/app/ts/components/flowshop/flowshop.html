@@ -13,5 +13,29 @@
 	          <input class="mqt-fileInput" type="file" (change)="solve($event)" />
 	        </div>
 		</div>
+		
+		<div *ngFor="let i of instances" class="col col-lg-4 col-md-6 col-sm-12 col-xs-12">
+			<div class="mqt-home-redHeader"></div>
+			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
+				<div class="mqt-title">Instance n°{{i.id}}</div>
+				<div class="table-responsive">
+		        	<table class="table table-striped">
+				         <thead>
+				             <tr>
+				                 <th>Jobs/Machines</th>
+				                 <th *ngFor="let m of i.jobs[0].processingTimes; let id = index" [attr.data-index]="id">{{id + 1}}</th>
+				             </tr>
+				        </thead>
+				        <tbody>
+				        	<tr *ngFor="let j of i.jobs" class="mqt-home-ligne">
+				        		<td>{{j.id}}</td>
+				        		<td *ngFor="let m of j.processingTimes">{{m}}</td>
+				        	</tr>
+				        </tbody>
+				     </table>
+				</div>
+			</div>			
+		</div>
+		
 	</div>
 </div>
