@@ -16,7 +16,7 @@ public class SignTestAnalyzer extends GenericAnalyzer {
 	/**
 	 * Constantes
 	 */
-	public static double ALPHA = 0.5;
+	public static double ALPHA = 0.05;
 	
 	/**
 	 * Analyzer h1 par rapport à h2 selon le test du signe

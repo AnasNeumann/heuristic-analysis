@@ -1,0 +1,17 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-title">Permutation Flow Shop | Résolution à l'aide d'heuristiques</div>
+		</div>
+		
+		<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="mqt-pictureContainer" tooltip="Uploader un fichier d'instances pour les résourdre" placement="right">
+	          <div class="mqt-picture">
+	              <i *ngIf="'' == form.file"  class="fa fa-file-text-o" aria-hidden="true"></i>
+	              <i *ngIf="'' != form.file"  class="fa fa-check-circle mqt-flowshop-checked" aria-hidden="true"></i>
+	          </div>
+	          <input class="mqt-fileInput" type="file" (change)="solve($event)" />
+	        </div>
+		</div>
+	</div>
+</div>

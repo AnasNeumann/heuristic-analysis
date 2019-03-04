@@ -21,6 +21,7 @@ import { Wilcoxon } from './ts/components/wilcoxon/Wilcoxon';
 import { AverageTest } from './ts/components/averagetest/AverageTest';
 import { Estimate } from './ts/components/estimate/Estimate';
 import { Bound } from './ts/components/bound/Bound';
+import { FlowShop } from './ts/components/flowshop/FlowShop';
 
 // OTHER IMPORTS
 import { Routing } from './Routing';
@@ -42,7 +43,8 @@ import { EffectService } from './ts/services/EffectService';
     Wilcoxon,
     AverageTest,
     Estimate,
-    Bound
+    Bound,
+    FlowShop
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.mqt-picture{
+	background-color: white;
+}
+
+.mqt-flowshop-checked{
+	color : #f39612;
+}
+
+.mqt-pictureContainer{
+	width: 110px;
+    height: 110px;
+    overflow: hidden;
+    display: inline-block;
+}

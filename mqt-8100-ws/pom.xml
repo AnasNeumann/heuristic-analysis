@@ -71,6 +71,16 @@
         <version>1.4.3.RELEASE</version>
     </parent>
     <dependencies>
+    	
+       <!-- CPLEX Dependencies -->
+       <dependency>
+		   <groupId>cplex</groupId>
+		   <artifactId>cplex</artifactId>
+		   <version>12.8.0</version>
+		   <scope>system</scope>
+		   <systemPath>${env.CPLEX_STUDIO_DIR128}/cplex/lib/cplex.jar</systemPath>
+		</dependency>
+		    
         <!-- SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -10,6 +10,7 @@ import { Wilcoxon } from './ts/components/wilcoxon/Wilcoxon';
 import { AverageTest } from './ts/components/averagetest/AverageTest';
 import { Estimate } from './ts/components/estimate/Estimate';
 import { Bound } from './ts/components/bound/Bound';
+import { FlowShop } from './ts/components/flowshop/FlowShop';
 
 /**
  * Module de routing
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'averageTest', component: AverageTest },
   { path: 'estimate', component: Estimate },
   { path: 'boundGenerator', component: Bound },
+  { path: 'flowshop', component: FlowShop },
 ];
 
 @NgModule({

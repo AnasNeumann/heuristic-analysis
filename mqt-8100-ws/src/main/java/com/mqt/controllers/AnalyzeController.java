@@ -42,7 +42,7 @@ import com.mqt.pojo.vo.HeuristicVo;
 public class AnalyzeController extends GenericController {
 
 	/**
-	 * Injection of dependancies
+	 * Injection of dependencies
 	 */
 	@Autowired
 	EvaluationCriteriaAnalyzer ECAnalyzer;

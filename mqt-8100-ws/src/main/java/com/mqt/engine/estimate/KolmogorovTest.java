@@ -57,7 +57,7 @@ public class KolmogorovTest extends GenericEstimatorEngine {
 	}
 
 	/**
-	 * Calculer la loi de weibull avec les valeurs a,b,c trouvés
+	 * Calculer la loi de Weibull avec les valeurs a,b,c trouvées
 	 * @param value
 	 * @param bound
 	 * @return
