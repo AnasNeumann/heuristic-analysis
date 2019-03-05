@@ -56,6 +56,7 @@ public class SolveController extends GenericController {
 		Long idNEH = heuristicService.createOrUpdate(new HeuristicVo().setName("NEH"));
 		Long idCDS = heuristicService.createOrUpdate(new HeuristicVo().setName("CDS"));
 		long idPalmer = heuristicService.createOrUpdate(new HeuristicVo().setName("Palmer"));
+		deleteService.purge();
 		for(FlowShopInstanceDto i : instances) {
 			i.getHeuristics().add(nehHeuristic.solve(i));
 			i.getHeuristics().add(palmerHeuristic.solve(i));

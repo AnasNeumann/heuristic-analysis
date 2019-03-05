@@ -48,9 +48,24 @@ public class GenericDeleteService extends GenericService {
 	 */
 	@Autowired
 	protected ProfileService profileService;
-	
+	@Autowired
+	private HeuristicService heuristicService;
 	@Autowired
 	protected ValueService valueService;
+	@Autowired
+	protected InstanceService instanceService;
+	
+	/**
+	 * Purge the database
+	 */
+	public void purge() {
+		for(HeuristicVo h : heuristicService.getAll()) {
+			this.cascade(h);
+		}
+		for(InstanceVo i : instanceService.getAll()) {
+			this.cascade(i);
+		}
+	}
 	
 	/**
 	 * cascade delete a estimate

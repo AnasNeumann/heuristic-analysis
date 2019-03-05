@@ -1,5 +1,8 @@
 package com.mqt.engine.analyze;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.springframework.stereotype.Service;
 
 import com.mqt.pojo.dto.SingleSignTestDto;
@@ -17,7 +20,7 @@ public class SignTestAnalyzer extends GenericAnalyzer {
 	 * Constantes
 	 */
 	public static double ALPHA = 0.05;
-	
+
 	/**
 	 * Analyzer h1 par rapport à h2 selon le test du signe
 	 * @param h1
@@ -81,8 +84,8 @@ public class SignTestAnalyzer extends GenericAnalyzer {
 	 * @param n
 	 * @return
 	 */
-	private double binomialCoefficient(int y, int n) {
-		return ((double) factoriel(n)) / (factoriel(y) * factoriel(n - y));
+	private Double binomialCoefficient(int y, int n) {
+		return factoriel(n).divide(factoriel(y).multiply(factoriel(n - y))).doubleValue();
 	}
 
 	/**
@@ -90,10 +93,10 @@ public class SignTestAnalyzer extends GenericAnalyzer {
 	 * @param k
 	 * @return
 	 */
-	private long factoriel(long k) {
-		if(k <= 1) {
-			return 1;
-		}
-		return (k * factoriel(k - 1));
+	private BigDecimal factoriel(long k) {
+		BigDecimal fact = BigDecimal.valueOf(1);
+	    for (int i = 1; i <= k; i++)
+	        fact = fact.multiply(BigDecimal.valueOf(i));
+	    return fact;
 	}
 }
