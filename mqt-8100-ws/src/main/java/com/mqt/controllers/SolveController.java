@@ -1,5 +1,6 @@
 package com.mqt.controllers;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,9 @@ import com.mqt.engine.heuristics.flowshop.NEHHeuristic;
 import com.mqt.engine.heuristics.flowshop.PalmerHeuristic;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
+import com.mqt.pojo.vo.HeuristicVo;
+import com.mqt.pojo.vo.InstanceVo;
+import com.mqt.pojo.vo.ValueVo;
 
 /**
  * Controller pour la résolution à l'aide heuristiques
@@ -49,9 +53,25 @@ public class SolveController extends GenericController {
 	@RequestMapping(value = "/solve/flowshop", headers = "Content-Type= multipart/form-data", method = RequestMethod.POST, produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> flowshop(HttpServletRequest request) {
 		List<FlowShopInstanceDto> instances = GenericFlowShopHeuristic.parse(request.getParameter("file"));
+		Long idNEH = heuristicService.createOrUpdate(new HeuristicVo().setName("NEH"));
+		Long idCDS = heuristicService.createOrUpdate(new HeuristicVo().setName("CDS"));
+		long idPalmer = heuristicService.createOrUpdate(new HeuristicVo().setName("Palmer"));
 		for(FlowShopInstanceDto i : instances) {
 			i.getHeuristics().add(nehHeuristic.solve(i));
 			i.getHeuristics().add(palmerHeuristic.solve(i));
+			i.getHeuristics().add(cdsHeuristic.solve(i));
+			Double NEHValue = i.getHeuristics().get(0).getOptimal();
+			Double CDSValue = i.getHeuristics().get(1).getOptimal();
+			Double palmerValue = i.getHeuristics().get(2).getOptimal();
+			Double optimal = Math.min(NEHValue,Math.min(CDSValue,palmerValue));
+			InstanceVo instance = new InstanceVo().
+					setId(i.getId())
+					.setTimestamps(GregorianCalendar.getInstance())
+					.setOptimal(optimal.intValue());
+			instance.setId(instanceService.createOrUpdate(instance));
+			valueService.createOrUpdate(new ValueVo().setHeuristicId(idNEH).setInstance(instance).setValue(NEHValue.intValue()));
+			valueService.createOrUpdate(new ValueVo().setHeuristicId(idPalmer).setInstance(instance).setValue(CDSValue.intValue()));
+			valueService.createOrUpdate(new ValueVo().setHeuristicId(idCDS).setInstance(instance).setValue(palmerValue.intValue()));
 		}
 		return many(instances);
 	}

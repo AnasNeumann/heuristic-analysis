@@ -1,4 +1,4 @@
-package com.mqt.comparators;
+package com.mqt.comparators.flowshop;
 
 import java.util.Comparator;
 

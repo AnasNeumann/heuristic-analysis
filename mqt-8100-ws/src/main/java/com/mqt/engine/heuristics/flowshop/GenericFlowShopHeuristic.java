@@ -1,8 +1,13 @@
 package com.mqt.engine.heuristics.flowshop;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mqt.comparators.flowshop.ELComparator;
+import com.mqt.comparators.flowshop.ERComparator;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.dto.flowshop.JobDto;
 import com.mqt.pojo.dto.flowshop.SequenceDto;
@@ -14,6 +19,14 @@ import com.mqt.pojo.dto.flowshop.SequenceDto;
  */
 public class GenericFlowShopHeuristic {
 
+	/**
+	 * Injection of dependencies
+	 */
+	@Autowired
+	protected ELComparator elComparator;
+	@Autowired
+	protected ERComparator erComparator;
+	
 	/**
 	 * Parse a file and get the list of all instances
 	 * @param file
@@ -49,7 +62,7 @@ public class GenericFlowShopHeuristic {
 	 * @param jobs
 	 * @return
 	 */
-	public static List<SequenceDto> johnson(List<JobDto> jobs){
+	protected List<SequenceDto> johnson(List<JobDto> jobs){
 		List<SequenceDto> result = new ArrayList<SequenceDto>();
 		List<JobDto> EL = new ArrayList<JobDto>();
 		List<JobDto> ER = new ArrayList<JobDto>();
@@ -60,7 +73,8 @@ public class GenericFlowShopHeuristic {
 				ER.add(j);
 			}
 		}
-		// TODO tri croissant EL sur p1 et décroissant ER sur p2
+		Collections.sort(EL, elComparator);
+		Collections.sort(ER, erComparator);
 		for(JobDto j : EL) {
 			result.add(new SequenceDto().setJob(j));
 		}

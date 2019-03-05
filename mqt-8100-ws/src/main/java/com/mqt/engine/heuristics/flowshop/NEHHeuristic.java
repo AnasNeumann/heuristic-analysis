@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mqt.comparators.JobComparator;
+import com.mqt.comparators.flowshop.JobComparator;
 import com.mqt.pojo.dto.flowshop.FlowShopHeuristicDto;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.dto.flowshop.JobDto;
@@ -37,8 +37,9 @@ public class NEHHeuristic extends GenericFlowShopHeuristic {
 		List<SequenceDto> sequences = new ArrayList<SequenceDto>();
 		Integer nbrMachines = jobs.get(0).getProcessingTimes().size();
 		Collections.sort(jobs, comparator);
+		Double makespanMin = null;
 		for(JobDto job : jobs) {
-			Double makespanMin = null;
+			makespanMin = null;
 			Integer choixPosition = 0;
 			SequenceDto newSequence = new SequenceDto().setJob(job);
 			for(int i=0; i<=sequences.size(); i++) {
@@ -50,9 +51,6 @@ public class NEHHeuristic extends GenericFlowShopHeuristic {
 			}
 			sequences = getNewSequences(sequences, newSequence, choixPosition);
 		}
-		return new FlowShopHeuristicDto().setName("NEH, Nawaz, Enscore et Ham").setSequences(sequences).setOptimal(getMakespan(sequences, nbrMachines));
+		return new FlowShopHeuristicDto().setName("NEH : Nawaz, Enscore & Ham").setSequences(sequences).setOptimal(makespanMin);
 	}
-	
-	 
-	
 }

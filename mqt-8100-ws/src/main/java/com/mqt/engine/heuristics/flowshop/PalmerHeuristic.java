@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mqt.comparators.SlopeIndexComparator;
+import com.mqt.comparators.flowshop.SlopeIndexComparator;
 import com.mqt.pojo.dto.flowshop.FlowShopHeuristicDto;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.dto.flowshop.IndexedJobDto;
@@ -41,13 +41,13 @@ public class PalmerHeuristic extends GenericFlowShopHeuristic {
 		}
 		return new FlowShopHeuristicDto().setName("Palmer").setSequences(sequences).setOptimal(getMakespan(sequences, nbrMachines));
 	}
-	
+
 	/**
 	 * get the indexedJobs
 	 * @param jobs
 	 * @return
 	 */
-	public List<IndexedJobDto> getIndexedJobs(List<JobDto> jobs, Integer nbrMachines) {
+	private List<IndexedJobDto> getIndexedJobs(List<JobDto> jobs, Integer nbrMachines) {
 		List<IndexedJobDto> indexedJobs = new ArrayList<IndexedJobDto>();
 		for(JobDto job : jobs) {
 			Integer slopeIndex = 0;
