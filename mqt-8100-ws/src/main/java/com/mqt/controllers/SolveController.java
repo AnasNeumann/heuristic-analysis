@@ -53,10 +53,10 @@ public class SolveController extends GenericController {
 	@RequestMapping(value = "/solve/flowshop", headers = "Content-Type= multipart/form-data", method = RequestMethod.POST, produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> flowshop(HttpServletRequest request) {
 		List<FlowShopInstanceDto> instances = GenericFlowShopHeuristic.parse(request.getParameter("file"));
+		deleteService.purge();
 		Long idNEH = heuristicService.createOrUpdate(new HeuristicVo().setName("NEH"));
 		Long idCDS = heuristicService.createOrUpdate(new HeuristicVo().setName("CDS"));
 		long idPalmer = heuristicService.createOrUpdate(new HeuristicVo().setName("Palmer"));
-		deleteService.purge();
 		for(FlowShopInstanceDto i : instances) {
 			i.getHeuristics().add(nehHeuristic.solve(i));
 			i.getHeuristics().add(palmerHeuristic.solve(i));

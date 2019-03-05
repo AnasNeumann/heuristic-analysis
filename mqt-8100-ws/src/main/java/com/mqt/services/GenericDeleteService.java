@@ -58,12 +58,14 @@ public class GenericDeleteService extends GenericService {
 	/**
 	 * Purge the database
 	 */
+	@Modifying
+	@Transactional
 	public void purge() {
 		for(HeuristicVo h : heuristicService.getAll()) {
 			this.cascade(h);
 		}
 		for(InstanceVo i : instanceService.getAll()) {
-			this.cascade(i);
+			instanceRepository.delete(i.getId());
 		}
 	}
 	

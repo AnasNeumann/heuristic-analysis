@@ -1,7 +1,6 @@
 package com.mqt.engine.analyze;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import org.springframework.stereotype.Service;
 
