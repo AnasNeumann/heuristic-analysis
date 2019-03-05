@@ -46,6 +46,7 @@ export class FlowShop extends GenericComponent {
             that.form.file = e.target.result;
             that.service.upload("/solve/flowshop", that.form).then(response =>{
                 that.instances = response.many;
+                console.log(that.instances);
             });
         }
         reader.readAsText(file);

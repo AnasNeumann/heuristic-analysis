@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.dto.flowshop.JobDto;
+import com.mqt.pojo.dto.flowshop.SequenceDto;
 
 /**
  * Module des Heuristiques pour les problèmes de Flow Shop avec permutation
@@ -40,6 +41,85 @@ public class GenericFlowShopHeuristic {
 			}
 			result.add(instance);
 		}
+		return result;
+	}
+	
+	/**
+	 * Save a 2-machine problem to optimality with johnson
+	 * @param jobs
+	 * @return
+	 */
+	public static List<SequenceDto> johnson(List<JobDto> jobs){
+		List<SequenceDto> result = new ArrayList<SequenceDto>();
+		List<JobDto> EL = new ArrayList<JobDto>();
+		List<JobDto> ER = new ArrayList<JobDto>();
+		for(JobDto j : jobs) {
+			if(j.getProcessingTimes().get(0) <= j.getProcessingTimes().get(1)) {
+				EL.add(j);
+			}else {
+				ER.add(j);
+			}
+		}
+		// TODO tri croissant EL sur p1 et décroissant ER sur p2
+		for(JobDto j : EL) {
+			result.add(new SequenceDto().setJob(j));
+		}
+		for(JobDto j : ER) {
+			result.add(new SequenceDto().setJob(j));
+		}
+		return result;
+	}
+	
+	/**
+	 * Get the enter date of a job in a machine
+	 * @param sequence of all currents jobs
+	 * @param j the current job index
+	 * @param m the current machine index
+	 * @return
+	 */
+	protected Integer getStartTime(List<SequenceDto> sequences, Integer job, Integer machine) {
+		if(job == 0) {
+			if(machine == 0) {
+				return 0;
+			} else {
+				Integer sumProcessingTimes = 0;
+				for(int p=0; p<machine; p++) {
+					sumProcessingTimes += sequences.get(0).getJob().getProcessingTimes().get(p);
+				}
+				return sumProcessingTimes;
+			}
+		} else {
+			Integer endPrecJob = getStartTime(sequences, job-1, machine) + sequences.get(job-1).getJob().getProcessingTimes().get(machine);
+			if(machine == 0) {
+				return endPrecJob;	
+			} else {
+				Integer endPrecMachine = getStartTime(sequences, job, machine-1) + sequences.get(job).getJob().getProcessingTimes().get(machine-1);
+				return Math.max(endPrecJob, endPrecMachine);
+			}
+		}
+	}
+	
+	/**
+	 * get the makespan of a solution
+	 * @param sequences
+	 * @param nbrMachines
+	 * @return
+	 */
+	protected Double getMakespan(List<SequenceDto> sequences, Integer nbrMachines) {
+		return new Double(getStartTime(sequences, sequences.size()-1, nbrMachines-1) 
+				 + sequences.get(sequences.size()-1).getJob().getProcessingTimes().get(nbrMachines-1));
+	}
+	
+	/**
+	 * Create a new sequence with the job in a specific position
+	 * @param sequences
+	 * @param newSequence
+	 * @param position
+	 * @return
+	 */
+	protected List<SequenceDto> getNewSequences(List<SequenceDto> sequences, SequenceDto newSequence, Integer position){
+		List<SequenceDto> result = new ArrayList<SequenceDto>(sequences);
+		result.add(position, newSequence);
 		return result;
 	}
 }

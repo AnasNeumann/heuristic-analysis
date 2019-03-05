@@ -13,7 +13,7 @@
 	          <input class="mqt-fileInput" type="file" (change)="solve($event)" />
 	        </div>
 		</div>
-		
+
 		<div *ngFor="let i of instances" class="col col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			<div class="mqt-home-redHeader"></div>
 			<div class="mqt-back-white mqt-padding-15 mqt-home-form mqt-home-bigForm">
@@ -34,8 +34,15 @@
 				        </tbody>
 				     </table>
 				</div>
+				
+				<div class="mqt-title">Solutions heuristiques</div>
+				<div *ngFor="let h of i.heuristics" class="mqt-flowshop-heuristic">
+					<div class="mqt-flowshop-heuristicTitle"><b>{{h.name}}</b></div>
+					Valeur du Makespan : {{h.optimal}}<br />
+					<span class="mqt-flowshop-heuristicTxt">&#123;<span *ngFor="let s of h.sequences; let id = index" [attr.data-index]="id"><span *ngIf="id > 0">&#8594;</span> {{s.job.id}} </span>&#125;</span>
+				</div>
 			</div>			
 		</div>
-		
+
 	</div>
 </div>
