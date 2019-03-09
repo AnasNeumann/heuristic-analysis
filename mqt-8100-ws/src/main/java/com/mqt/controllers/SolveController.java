@@ -18,6 +18,7 @@ import com.mqt.engine.heuristics.flowshop.CDSHeuristic;
 import com.mqt.engine.heuristics.flowshop.GenericFlowShopHeuristic;
 import com.mqt.engine.heuristics.flowshop.NEHHeuristic;
 import com.mqt.engine.heuristics.flowshop.PalmerHeuristic;
+import com.mqt.engine.solver.FlowShopSolver;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.vo.HeuristicVo;
@@ -43,6 +44,8 @@ public class SolveController extends GenericController {
 	private CDSHeuristic cdsHeuristic;
 	@Autowired
 	private PalmerHeuristic palmerHeuristic;
+	@Autowired
+	private FlowShopSolver solver;
 	
 	/**
 	 * Résolution de problème de flow shop avec permutation
@@ -58,18 +61,18 @@ public class SolveController extends GenericController {
 		Long idCDS = heuristicService.createOrUpdate(new HeuristicVo().setName("CDS"));
 		long idPalmer = heuristicService.createOrUpdate(new HeuristicVo().setName("Palmer"));
 		for(FlowShopInstanceDto i : instances) {
+			InstanceVo instance = new InstanceVo().
+					setId(i.getId())
+					.setTimestamps(GregorianCalendar.getInstance())
+					.setOptimal(0);
+			instance.setId(instanceService.createOrUpdate(instance));
+			solver.solve(i, instance);
 			i.getHeuristics().add(nehHeuristic.solve(i));
 			i.getHeuristics().add(palmerHeuristic.solve(i));
 			i.getHeuristics().add(cdsHeuristic.solve(i));
 			Double NEHValue = i.getHeuristics().get(0).getOptimal();
 			Double CDSValue = i.getHeuristics().get(1).getOptimal();
 			Double palmerValue = i.getHeuristics().get(2).getOptimal();
-			Double optimal = Math.min(NEHValue,Math.min(CDSValue,palmerValue));
-			InstanceVo instance = new InstanceVo().
-					setId(i.getId())
-					.setTimestamps(GregorianCalendar.getInstance())
-					.setOptimal(optimal.intValue());
-			instance.setId(instanceService.createOrUpdate(instance));
 			valueService.createOrUpdate(new ValueVo().setHeuristicId(idNEH).setInstance(instance).setValue(NEHValue.intValue()));
 			valueService.createOrUpdate(new ValueVo().setHeuristicId(idPalmer).setInstance(instance).setValue(CDSValue.intValue()));
 			valueService.createOrUpdate(new ValueVo().setHeuristicId(idCDS).setInstance(instance).setValue(palmerValue.intValue()));
