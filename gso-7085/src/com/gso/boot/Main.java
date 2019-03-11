@@ -1,5 +1,6 @@
 package com.gso.boot;
 
+import com.gso.engines.OptimalSchedulingEngine;
 import com.gso.engines.ParsingFileEngine;
 
 /**
@@ -16,7 +17,6 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		ParsingFileEngine.BuildInstance("instance1.xlsx");
+		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4.xlsx"));
 	}
-
 }

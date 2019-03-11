@@ -3,7 +3,7 @@ package com.gso.engines;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.gso.model.BombardierWeldingCellInstance;
+import com.gso.model.Instance;
 import com.gso.model.Job;
 import com.gso.model.Operation;
 
@@ -29,8 +29,8 @@ public class ParsingFileEngine {
 	 * @param fileName
 	 * @return
 	 */
-    public static BombardierWeldingCellInstance BuildInstance(String fileName) {
-    	BombardierWeldingCellInstance instance = new BombardierWeldingCellInstance();
+    public static Instance BuildInstance(String fileName) {
+    	Instance instance = new Instance();
     	List<List<String>> data = parseFile(fileName);
     	for(List<String> ligne : data) {
     		Job j = new Job()
@@ -103,7 +103,7 @@ public class ParsingFileEngine {
 	 * Display an instance job by job
 	 * @param i
 	 */
-	public static void displayInstance(BombardierWeldingCellInstance i) {
+	public static void displayInstance(Instance i) {
     	for(Job j : i.getJobs()) {
     		System.out.println("=== Job : id = "+j.getId()+"; due date = "+j.getDueDate()+"; size = "+j.isSize()+"; position time = "+j.getPositionTime());
     		for(Operation o : j.getOperations()) {

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe représentant notre modèle de données
+ * Classe représentant une instance du problème
  * @author Anas Neumann <anas.neumann.isamm@gmail.com>
  * @author Safwan Al-Shabakji 
  * @since 07/03/2019
  * @version 1.0
  */
-public class BombardierWeldingCellInstance {
+public class Instance {
 	private List<Job> jobs = new ArrayList<Job>();
 
 	/**
@@ -23,7 +23,7 @@ public class BombardierWeldingCellInstance {
 	/**
 	 * @param jobs the jobs to set
 	 */
-	public BombardierWeldingCellInstance setJobs(List<Job> jobs) {
+	public Instance setJobs(List<Job> jobs) {
 		this.jobs = jobs;
 		return this;
 	}
