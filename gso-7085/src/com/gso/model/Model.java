@@ -3,6 +3,7 @@ package com.gso.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ilog.concert.IloIntVar;
 import ilog.concert.IloNumVar;
 import ilog.concert.IloRange;
 
@@ -22,11 +23,11 @@ public class Model {
 	public Integer nbrJobs;
 	public Double I = 0.0;
 	
-	public IloNumVar[][] varLoad;
+	public IloIntVar[][] varLoad;
 	public IloNumVar[][] varBegin;
 	public IloNumVar[][] varWeld;
-	public IloNumVar[][][] varMode;
-	public IloNumVar[][][][] varPrecedence;
+	public IloIntVar[][][] varMode;
+	public IloIntVar[][][][] varPrecedence;
 	public IloNumVar[] varDelay;
 
 	public IloRange[][][][] C1;
@@ -59,13 +60,13 @@ public class Model {
 				I += o.getProcessingTime() + j.getPositionTime();
 			}
 		}
-		I *= 1.5;
-
-		varLoad = new IloNumVar[nbrJobs][nbrLoadStations];
+		//I *= 10;
+		
+		varLoad = new IloIntVar[nbrJobs][nbrLoadStations];
 		varBegin = new IloNumVar[nbrJobs][nbrLoadStations];
 		varWeld = new IloNumVar[nbrJobs][];
-		varMode = new IloNumVar[nbrJobs][][];
-		varPrecedence = new IloNumVar[nbrJobs][][][];
+		varMode = new IloIntVar[nbrJobs][][];
+		varPrecedence = new IloIntVar[nbrJobs][][][];
 		varDelay = new IloNumVar[nbrJobs];
 
 		C1 = new IloRange[nbrJobs][][][];

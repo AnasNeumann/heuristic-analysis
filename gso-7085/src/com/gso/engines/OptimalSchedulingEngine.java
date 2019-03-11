@@ -5,6 +5,7 @@ import com.gso.model.Job;
 import com.gso.model.Model;
 
 import ilog.concert.IloException;
+import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.concert.IloRange;
@@ -49,8 +50,8 @@ public class OptimalSchedulingEngine {
 			String[] namesLoads = new String[m.nbrLoadStations];
 			String[] namesBegin = new String[m.nbrLoadStations];
 			String[] namesWeld = new String[nbrOpJ];
-			m.varMode[j] = new IloNumVar[nbrOpJ][m.nbrModes];
-			m.varPrecedence[j] = new IloNumVar[nbrOpJ][m.nbrJobs][];
+			m.varMode[j] = new IloIntVar[nbrOpJ][m.nbrModes];
+			m.varPrecedence[j] = new IloIntVar[nbrOpJ][m.nbrJobs][];
 			for(int q = 0; q <nbrOpJ; q++) {
 				namesWeld[q] = "W("+j+","+q+")";
 				String[] namesModes = new String[m.nbrModes];
@@ -63,21 +64,21 @@ public class OptimalSchedulingEngine {
 					for(int k = 0; k <nbrOpI; k++) {
 						namesPrecedences[k] = "P("+j+","+q+","+i+","+k+")";
 					}
-					m.varPrecedence[j][q][i] = cplex.numVarArray(nbrOpI, 0, 1, namesPrecedences);
+					m.varPrecedence[j][q][i] = cplex.boolVarArray(nbrOpI, namesPrecedences);
 				}
-				m.varMode[j][q] = cplex.numVarArray(m.nbrModes, 0, 1, namesModes);
+				m.varMode[j][q] = cplex.boolVarArray(m.nbrModes, namesModes);
 			}
 			for(int l=0; l<m.nbrLoadStations; l++) {
 				namesLoads[l] = "L("+j+","+l+")";
 				namesBegin[l] = "B("+j+","+l+")";
 			}
 			m.varWeld[j] = cplex.numVarArray(nbrOpJ, 0.0, Double.MAX_VALUE, namesWeld);
-			m.varLoad[j] = cplex.numVarArray(m.nbrLoadStations, 0, 1, namesLoads);
+			m.varLoad[j] = cplex.boolVarArray(m.nbrLoadStations, namesLoads);
 			m.varBegin[j] = cplex.numVarArray(m.nbrLoadStations, 0.0, Double.MAX_VALUE, namesBegin);
 		}
 		m.varDelay = cplex.numVarArray(m.nbrJobs, 0.0, Double.MAX_VALUE, namesDelay);
 	}
-	
+
 	/**
 	 * Création de l'ensemble des contraintes
 	 * @param cplex
@@ -85,11 +86,9 @@ public class OptimalSchedulingEngine {
 	 * @throws IloException
 	 */
 	private void createContraintes(IloCplex cplex, Model m) throws IloException {
-		int NBR_TOTAL_CONTRAINTES = 0;
 		for(int j=0; j<m.nbrJobs; j++) {
 			Job job = m.jobs.get(j);
 			m.C13[j] = cplex.addGe(m.varDelay[j], 0, "C13("+j+")"); 
-			NBR_TOTAL_CONTRAINTES++;
 			Integer nbrOpJ = job.getOperations().size();
 			m.C1[j] = new IloRange[nbrOpJ][][]; 
 			m.C2[j] = new IloRange[nbrOpJ];
@@ -107,7 +106,7 @@ public class OptimalSchedulingEngine {
 				m.C5[j][q] = new IloRange[m.nbrJobs][];
 				m.C15[j][q] = new IloRange[m.nbrJobs][];
 				for(int i=0; i<m.nbrJobs; i++) {
-					if(i != j) {
+					if(i != j) {						
 						Job job2 = m.jobs.get(i);
 						Integer nbrOpI = job2.getOperations().size();
 						m.C1[j][q][i] = new IloRange[nbrOpI];
@@ -120,7 +119,6 @@ public class OptimalSchedulingEngine {
 							c1.addTerm(1.0, m.varPrecedence[j][q][i][k]);
 							c1.addTerm(1.0,  m.varPrecedence[i][k][j][q]);
 							m.C1[j][q][i][k] = cplex.addEq(c1, 1, "C1("+j+","+q+","+i+","+k+")");
-							NBR_TOTAL_CONTRAINTES++;
 							
 							IloLinearNumExpr c3 = cplex.linearNumExpr();
 							c3.addTerm(1.0, m.varWeld[j][q]);
@@ -130,7 +128,6 @@ public class OptimalSchedulingEngine {
 							c3.addTerm(-m.I, m.varMode[i][k][0]);
 							c3.addTerm(-m.I, m.varMode[i][k][2]);
 							m.C3[j][q][i][k] = cplex.addGe(c3, job2.getOperations().get(k).getProcessingTime() -(2 * m.I), "C3("+j+","+q+","+i+","+k+")");
-							NBR_TOTAL_CONTRAINTES++;
 							
 							IloLinearNumExpr c4 = cplex.linearNumExpr();
 							c4.addTerm(1.0, m.varWeld[j][q]);
@@ -140,15 +137,13 @@ public class OptimalSchedulingEngine {
 							c4.addTerm(-m.I, m.varMode[j][q][0]);
 							c4.addTerm(-m.I, m.varMode[j][q][1]);
 							m.C4[j][q][i][k] = cplex.addGe(c4, job2.getOperations().get(k).getProcessingTime() -(2 * m.I), "C4("+j+","+q+","+i+","+k+")");
-							NBR_TOTAL_CONTRAINTES++;
 							
 							IloLinearNumExpr c5 = cplex.linearNumExpr();
 							c5.addTerm(1.0, m.varWeld[j][q]);
 							c5.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
 							c5.addTerm(-1.0 * m.I, m.varPrecedence[i][k][j][q]);
 							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I, "C5("+j+","+q+","+i+","+k+")");
-							NBR_TOTAL_CONTRAINTES++;
-							
+
 							IloLinearNumExpr c15 = cplex.linearNumExpr();
 							c15.addTerm(1.0, m.varDelay[j]);
 							c15.addTerm(-1.0, m.varWeld[i][k]);
@@ -158,9 +153,8 @@ public class OptimalSchedulingEngine {
 							c15.addTerm(-m.I, m.varMode[i][k][2]);
 							c15.addTerm(m.I, m.varWeld[i][k]);
 							c15.addTerm(-m.I, m.varWeld[j][q]);
-							m.C15[j][q][i][k] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -3*m.I + m.I*job.getPositionTime(),
-									"C15("+j+","+q+","+i+","+k+")");
-							NBR_TOTAL_CONTRAINTES++;
+							//m.C15[j][q][i][k] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -3*m.I + m.I*job.getPositionTime(),
+							//		"C15("+j+","+q+","+i+","+k+")");
 						}
 					}
 				}
@@ -170,7 +164,6 @@ public class OptimalSchedulingEngine {
 					c2.addTerm(-1.0, m.varWeld[j][q-1]);
 					c2.addTerm(-job.getPositionTime(), m.varMode[j][q-1][1]);
 					m.C2[j][q] =  cplex.addGe(c2, job.getOperations().get(q-1).getProcessingTime(), "C2("+j+","+q+")");
-					NBR_TOTAL_CONTRAINTES++;
 				}
 				IloLinearNumExpr c7 = cplex.linearNumExpr();
 				for(int o=0; o<m.nbrModes; o++) {
@@ -178,14 +171,12 @@ public class OptimalSchedulingEngine {
 				}
 				m.C7[j][q] = cplex.addEq(c7, 1, "C7("+j+","+q+")");
 				m.C8[j][q] = cplex.addEq(m.varMode[j][q][2], job.getOperations().get(q).getWeldingProcess().equals(2)? 1 : 0, "C8("+j+","+q+")");
-				NBR_TOTAL_CONTRAINTES++;
 				
 				IloLinearNumExpr c14 = cplex.linearNumExpr();
 				c14.addTerm(1.0, m.varDelay[j]);
 				c14.addTerm(-1.0, m.varWeld[j][q]);
 				c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
 				m.C14[j][q] =  cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate(), "C14("+j+","+q+")");	
-				NBR_TOTAL_CONTRAINTES++;
 			}
 			IloLinearNumExpr c6 = cplex.linearNumExpr();
 			IloLinearNumExpr c9 = cplex.linearNumExpr();
@@ -213,7 +204,6 @@ public class OptimalSchedulingEngine {
 							c11.addTerm(-m.I, m.varLoad[j][l]);
 							m.C11[j][l][i][q] = cplex.addGe(c11, job2.getOperations().get(q).getProcessingTime() - 3*m.I, 
 									"C11("+j+","+l+","+i+","+q+")");
-							NBR_TOTAL_CONTRAINTES++;
 							
 							m.C12[j][l][i][q] = new IloRange[m.nbrJobs][];
 							for(int y=0; y<m.nbrJobs; y++) {
@@ -234,9 +224,8 @@ public class OptimalSchedulingEngine {
 										c12.addTerm(-m.I, m.varPrecedence[i][0][j][0]);
 										c12.addTerm(-m.I, m.varLoad[i][l]);
 										c12.addTerm(-m.I, m.varLoad[j][l]);
-										m.C12[j][l][i][q][y][k] = cplex.addGe(c12, job3.getOperations().get(k).getProcessingTime() - 6*m.I + job2.getPositionTime()*m.I, 
-												"C12("+j+","+l+","+i+","+q+","+y+","+k+")");
-										NBR_TOTAL_CONTRAINTES++;
+										//m.C12[j][l][i][q][y][k] = cplex.addGe(c12, job3.getOperations().get(k).getProcessingTime() - 6*m.I + job2.getPositionTime()*m.I, 
+										//		"C12("+j+","+l+","+i+","+q+","+y+","+k+")");
 									}
 								}
 							}
@@ -245,13 +234,79 @@ public class OptimalSchedulingEngine {
 				}
 			}
 			m.C6[j] = cplex.addGe(c6, 0, "C6("+j+")");
-			NBR_TOTAL_CONTRAINTES++;
 			m.C9[j] = cplex.addEq(c9, 1, "C9("+j+")");
-			NBR_TOTAL_CONTRAINTES++;
 			m.C10[j] = cplex.addGe(m.varLoad[j][1], job.isSize()? 1 : 0, "C10("+j+")");
-			NBR_TOTAL_CONTRAINTES++;
 		}
-		System.out.println("==> Nombre total de contraintes générées "+NBR_TOTAL_CONTRAINTES);
+	}
+
+	/**
+	 * Création de la fonction objectif
+	 * @param cplex
+	 * @param m
+	 * @throws IloException
+	 */
+	private void createObjectifFonction(IloCplex cplex, Model m) throws IloException {
+		IloLinearNumExpr objectif = cplex.linearNumExpr();
+		for(IloNumVar D : m.varDelay) {
+			objectif.addTerm(1.0/m.nbrJobs, D);
+		}
+		cplex.addMinimize(objectif);
+	}
+	
+	/**
+	 * Afficher en détail les résultats de la résoltion
+	 * @param cplex
+	 * @param m
+	 * @throws IloException 
+	 */
+	private void displayResult(IloCplex cplex, Model m) throws IloException {
+		cplex.output().println("Solution status = " + cplex.getStatus());
+		cplex.output().println("Solution value  = " + cplex.getObjValue());
+		cplex.output().println("Infinity value  = " + m.I);
+		double[] varDelay = cplex.getValues(m.varDelay);
+		System.out.println();
+		System.out.println("=== Affiche de la précédence ===");
+		for(int j=0; j<m.nbrJobs; j++) {
+			Job job = m.jobs.get(j);
+			for(int q=0; q<job.getOperations().size(); q++) {
+				for(int i=0; i<m.nbrJobs; i++) {
+					if(i != j) {
+						Job job2 = m.jobs.get(i);
+						for(int k=0; k<job2.getOperations().size(); k++) {
+							System.out.println("- Opération n°"+(q+1)+", pièce "+(j+1)
+									+" avant opération "+(k+1)+", pièce "+(i+1)+" = "+cplex.getValue(m.varPrecedence[j][q][i][k]));
+						}
+					}
+				}
+			}
+		}
+		System.out.println();
+		for(int j=0; j<varDelay.length; j++) {
+			double[] varWeld = cplex.getValues(m.varWeld[j]);
+			double[] varLoad = cplex.getValues(m.varLoad[j]);
+			int load = 0;
+			for(int l=0; l<varLoad.length; l++) {
+				if(varLoad[l] > 0) {
+					load = l;
+				}
+			}
+			double begin = cplex.getValue(m.varBegin[j][load]);
+			System.out.println("=== Pièce n°"+(j+1)+" (chargée sur la station n°"+(load+1)+" à "+begin+" minutes) ===");
+			System.out.println("Date de réalisation des opérations :");
+			for(int q=0; q<varWeld.length; q++) {
+				double[] varMode = cplex.getValues(m.varMode[j][q]);
+				int mode = 0;
+				for(int o=0; o<varMode.length; o++) {
+					if(varMode[o] > 0) {
+						mode = o;
+					}
+				}
+				System.out.println("- Opération n°"+(q+1)+" (executée en mode "+(mode+1)+") a débutée à "+varWeld[q]);
+			}
+			System.out.println("=> Ainsi le retard de la pièce n°"+(j+1)+" = "+varDelay[j]);
+			System.out.println();
+		}
+		
 	}
 
 	/**
@@ -263,16 +318,15 @@ public class OptimalSchedulingEngine {
 			IloCplex cplex = new IloCplex();
 			Model m = new Model(problem);		
 			createVariables(cplex, m);
+			createObjectifFonction(cplex, m);
 			createContraintes(cplex, m);
 			cplex.exportModel("lpex1.lp");
 			if (cplex.solve()) {
-				cplex.output().println("Solution status = " + cplex.getStatus());
-				cplex.output().println("Solution value  = " + cplex.getObjValue());
+				displayResult(cplex, m);
 			}
 			cplex.end();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
