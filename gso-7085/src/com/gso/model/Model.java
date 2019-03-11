@@ -34,15 +34,19 @@ public class Model {
 	public IloRange[][][][] C3;
 	public IloRange[][][][] C4;
 	public IloRange[][][][] C5;
+	public IloRange[] C6;
 	public IloRange[][] C7;
 	public IloRange[][] C8;
 	public IloRange[] C9;
 	public IloRange[] C10;
+	public IloRange[][][][] C11;
+	public IloRange[][][][][][] C12;
 	public IloRange[] C13;
+	public IloRange[][] C14;
+	public IloRange[][][][] C15;
 
 	/**
-	 * Constructeur
-	 * 
+	 * Constructeur à partir d'un probleme
 	 * @param problem
 	 */
 	public Model(Instance problem) {
@@ -69,10 +73,15 @@ public class Model {
 		C3 = new IloRange[nbrJobs][][][];
 		C4 = new IloRange[nbrJobs][][][];
 		C5 = new IloRange[nbrJobs][][][];
+		C6 = new IloRange[nbrJobs];
 		C7 = new IloRange[nbrJobs][];
 		C8 = new IloRange[nbrJobs][];
 		C9 = new IloRange[nbrJobs];
 		C10 = new IloRange[nbrJobs];
+		C11 = new IloRange[nbrJobs][][][];
+		C12 = new IloRange[nbrJobs][][][][][];
 		C13 = new IloRange[nbrJobs];
+		C14 = new IloRange[nbrJobs][];
+		C15 = new IloRange[nbrJobs][][][];
 	}
 }

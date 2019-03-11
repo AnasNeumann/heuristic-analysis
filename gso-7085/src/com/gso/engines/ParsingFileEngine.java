@@ -34,7 +34,7 @@ public class ParsingFileEngine {
     	List<List<String>> data = parseFile(fileName);
     	for(List<String> ligne : data) {
     		Job j = new Job()
-    				.setId(new Long(ligne.get(0)))
+    				.setId(new Long(beNumeric(ligne.get(0))))
     				.setSize(ligne.get(3).equals("1.0")? true : false)
     				.setDueDate(new Double(ligne.get(4)))
     				.setPositionTime(new Double(ligne.get(8)));
@@ -110,5 +110,14 @@ public class ParsingFileEngine {
     			System.out.println("operation : time = "+o.getProcessingTime()+"; process type = "+o.getWeldingProcess());
     		}
     	}
+	}
+	
+	/**
+	 * Rendre un id numérique
+	 * @param s
+	 * @return
+	 */
+	private static String beNumeric(String s) {
+		return s.replaceAll("[^0-9.]", "");
 	}
 }
