@@ -144,17 +144,25 @@ public class OptimalSchedulingEngine {
 							c5.addTerm(-1.0 * m.I, m.varPrecedence[i][k][j][q]);
 							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I, "C5("+j+","+q+","+i+","+k+")");
 
-							IloLinearNumExpr c15 = cplex.linearNumExpr();
-							c15.addTerm(1.0, m.varDelay[j]);
-							c15.addTerm(-1.0, m.varWeld[i][k]);
-							c15.addTerm(-job2.getPositionTime(), m.varMode[i][k][1]);
-							c15.addTerm(-m.I, m.varPrecedence[j][q][i][k]);
-							c15.addTerm(-m.I, m.varMode[j][q][1]);
-							c15.addTerm(-m.I, m.varMode[i][k][2]);
-							c15.addTerm(m.I, m.varWeld[i][k]);
-							c15.addTerm(-m.I, m.varWeld[j][q]);
-							//m.C15[j][q][i][k] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -3*m.I + m.I*job.getPositionTime(),
-							//		"C15("+j+","+q+","+i+","+k+")");
+							if(q == (nbrOpJ-1)) {
+								for(int y=0; y<m.nbrJobs; y++) {
+									if(y!=j && y!=i) {
+										Job job3 = m.jobs.get(y);
+										Integer nbrOpY = job3.getOperations().size();
+										for(int v=0; v<nbrOpY; v++) {
+											IloLinearNumExpr c15 = cplex.linearNumExpr();
+											c15.addTerm(1.0, m.varDelay[j]);
+											c15.addTerm(-1.0, m.varWeld[i][k]);
+											c15.addTerm(-job2.getPositionTime(), m.varMode[i][k][1]);
+											c15.addTerm(-m.I, m.varPrecedence[j][q][i][k]);
+											c15.addTerm(-m.I, m.varPrecedence[y][v][j][q]);	
+											c15.addTerm(-m.I, m.varPrecedence[i][k][y][v]);
+											m.C15[j][q][i][k] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -4*m.I,
+													"C15("+j+","+q+","+i+","+k+")");
+										}
+									}
+								}
+							}
 						}
 					}
 				}
@@ -172,11 +180,13 @@ public class OptimalSchedulingEngine {
 				m.C7[j][q] = cplex.addEq(c7, 1, "C7("+j+","+q+")");
 				m.C8[j][q] = cplex.addEq(m.varMode[j][q][2], job.getOperations().get(q).getWeldingProcess().equals(2)? 1 : 0, "C8("+j+","+q+")");
 				
-				IloLinearNumExpr c14 = cplex.linearNumExpr();
-				c14.addTerm(1.0, m.varDelay[j]);
-				c14.addTerm(-1.0, m.varWeld[j][q]);
-				c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
-				m.C14[j][q] =  cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate(), "C14("+j+","+q+")");	
+				if(q == (nbrOpJ-1)) {
+					IloLinearNumExpr c14 = cplex.linearNumExpr();
+					c14.addTerm(1.0, m.varDelay[j]);
+					c14.addTerm(-1.0, m.varWeld[j][q]);
+					c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
+					m.C14[j][q] =  cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate(), "C14("+j+","+q+")");	
+				}
 			}
 			IloLinearNumExpr c6 = cplex.linearNumExpr();
 			IloLinearNumExpr c9 = cplex.linearNumExpr();

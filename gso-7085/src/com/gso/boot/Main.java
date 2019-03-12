@@ -17,6 +17,6 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_2.xlsx"));
+		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4.xlsx"));
 	}
 }
