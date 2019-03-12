@@ -60,7 +60,6 @@ public class Model {
 				I += o.getProcessingTime() + j.getPositionTime();
 			}
 		}
-		//I *= 10;
 		
 		varLoad = new IloIntVar[nbrJobs][nbrLoadStations];
 		varBegin = new IloNumVar[nbrJobs][nbrLoadStations];

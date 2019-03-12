@@ -291,7 +291,7 @@ public class OptimalSchedulingEngine {
 		cplex.output().println("Infinity value  = " + m.I);
 		double[] varDelay = cplex.getValues(m.varDelay);
 		System.out.println();
-		System.out.println("=== Affiche de la précédence ===");
+		System.out.println("=== Choix en termes de précédence ===");
 		for(int j=0; j<m.nbrJobs; j++) {
 			Job job = m.jobs.get(j);
 			for(int q=0; q<job.getOperations().size(); q++) {
