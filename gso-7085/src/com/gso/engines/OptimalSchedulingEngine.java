@@ -1,5 +1,7 @@
 package com.gso.engines;
 
+import java.text.DecimalFormat;
+
 import com.gso.model.Instance;
 import com.gso.model.Job;
 import com.gso.model.Model;
@@ -98,13 +100,13 @@ public class OptimalSchedulingEngine {
 			m.C7[j] = new IloRange[nbrOpJ];
 			m.C8[j] = new IloRange[nbrOpJ];
 			m.C14[j] = new IloRange[nbrOpJ];
-			m.C15[j] = new IloRange[nbrOpJ][][];
+			m.C15[j] = new IloRange[nbrOpJ][][][][];
 			for(int q=0; q<nbrOpJ; q++) {
 				m.C1[j][q] = new IloRange[m.nbrJobs][];
 				m.C3[j][q] = new IloRange[m.nbrJobs][]; 
 				m.C4[j][q] = new IloRange[m.nbrJobs][]; 
 				m.C5[j][q] = new IloRange[m.nbrJobs][];
-				m.C15[j][q] = new IloRange[m.nbrJobs][];
+				m.C15[j][q] = new IloRange[m.nbrJobs][][][];
 				for(int i=0; i<m.nbrJobs; i++) {
 					if(i != j) {						
 						Job job2 = m.jobs.get(i);
@@ -113,7 +115,7 @@ public class OptimalSchedulingEngine {
 						m.C3[j][q][i] = new IloRange[nbrOpI];
 						m.C4[j][q][i] = new IloRange[nbrOpI];
 						m.C5[j][q][i] = new IloRange[nbrOpI];
-						m.C15[j][q][i] = new IloRange[nbrOpI];
+						m.C15[j][q][i] = new IloRange[nbrOpI][][];
 						for(int k=0; k<nbrOpI; k++) {
 							IloLinearNumExpr c1 = cplex.linearNumExpr();
 							c1.addTerm(1.0, m.varPrecedence[j][q][i][k]);
@@ -145,10 +147,12 @@ public class OptimalSchedulingEngine {
 							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I, "C5("+j+","+q+","+i+","+k+")");
 
 							if(q == (nbrOpJ-1)) {
+								m.C15[j][q][i][k] = new IloRange[m.nbrJobs][];
 								for(int y=0; y<m.nbrJobs; y++) {
 									if(y!=j && y!=i) {
 										Job job3 = m.jobs.get(y);
 										Integer nbrOpY = job3.getOperations().size();
+										m.C15[j][q][i][k][y] = new IloRange[nbrOpY];
 										for(int v=0; v<nbrOpY; v++) {
 											IloLinearNumExpr c15 = cplex.linearNumExpr();
 											c15.addTerm(1.0, m.varDelay[j]);
@@ -157,8 +161,8 @@ public class OptimalSchedulingEngine {
 											c15.addTerm(-m.I, m.varPrecedence[j][q][i][k]);
 											c15.addTerm(-m.I, m.varPrecedence[y][v][j][q]);	
 											c15.addTerm(-m.I, m.varPrecedence[i][k][y][v]);
-											m.C15[j][q][i][k] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -4*m.I,
-													"C15("+j+","+q+","+i+","+k+")");
+											m.C15[j][q][i][k][y][v] = cplex.addGe(c15, job2.getOperations().get(k).getProcessingTime() - job.getDueDate() -4*m.I,
+													"C15("+j+","+q+","+i+","+k+","+y+","+v+")");
 										}
 									}
 								}
@@ -192,18 +196,18 @@ public class OptimalSchedulingEngine {
 			IloLinearNumExpr c9 = cplex.linearNumExpr();
 			c6.addTerm(1.0, m.varWeld[j][0]);
 			m.C11[j] = new IloRange[m.nbrLoadStations][][];
-			m.C12[j] = new IloRange[m.nbrLoadStations][][][][];
+			m.C12[j] = new IloRange[m.nbrLoadStations][][][][][][];
 			for(int l=0; l<m.nbrLoadStations; l++) {
 				c9.addTerm(1.0, m.varLoad[j][l]);
 				c6.addTerm(-1.0, m.varBegin[j][l]);
 				m.C11[j][l] = new IloRange[m.nbrJobs][];
-				m.C12[j][l] = new IloRange[m.nbrJobs][][][];
+				m.C12[j][l] = new IloRange[m.nbrJobs][][][][][];
 				for(int i=0; i<m.nbrJobs; i++) {
 					if(i != j) {
 						Job job2 = m.jobs.get(i);
 						Integer nbrOpI = job2.getOperations().size();
 						m.C11[j][l][i] = new IloRange[nbrOpI];
-						m.C12[j][l][i] = new IloRange[nbrOpI][m.nbrJobs][];
+						m.C12[j][l][i] = new IloRange[nbrOpI][m.nbrJobs][][][];
 						for(int q=0; q<nbrOpI; q++) {
 							IloLinearNumExpr c11 = cplex.linearNumExpr();
 							c11.addTerm(1.0, m.varBegin[j][l]);
@@ -215,27 +219,37 @@ public class OptimalSchedulingEngine {
 							m.C11[j][l][i][q] = cplex.addGe(c11, job2.getOperations().get(q).getProcessingTime() - 3*m.I, 
 									"C11("+j+","+l+","+i+","+q+")");
 							
-							m.C12[j][l][i][q] = new IloRange[m.nbrJobs][];
-							for(int y=0; y<m.nbrJobs; y++) {
-								if(y != j && y != i) {
-									Job job3 = m.jobs.get(y);
-									Integer nbrOpY = job3.getOperations().size();
-									m.C12[j][l][i][q][y] = new IloRange[nbrOpY];
-									for(int k=0; k<nbrOpY; k++) {
-										IloLinearNumExpr c12 = cplex.linearNumExpr();
-										c12.addTerm(1.0, m.varBegin[j][l]);
-										c12.addTerm(-1.0,  m.varWeld[y][k]);
-										c12.addTerm(-job3.getPositionTime(), m.varMode[y][k][1]);
-										c12.addTerm(-m.I, m.varPrecedence[i][q][y][k]);
-										c12.addTerm(-m.I, m.varMode[i][q][1]);
-										c12.addTerm(-m.I, m.varMode[y][k][2]);
-										c12.addTerm(m.I, m.varWeld[y][k]);
-										c12.addTerm(-m.I, m.varWeld[i][q]);
-										c12.addTerm(-m.I, m.varPrecedence[i][0][j][0]);
-										c12.addTerm(-m.I, m.varLoad[i][l]);
-										c12.addTerm(-m.I, m.varLoad[j][l]);
-										//m.C12[j][l][i][q][y][k] = cplex.addGe(c12, job3.getOperations().get(k).getProcessingTime() - 6*m.I + job2.getPositionTime()*m.I, 
-										//		"C12("+j+","+l+","+i+","+q+","+y+","+k+")");
+							if(q == (nbrOpI-1)) {
+								for(int y=0; y<m.nbrJobs; y++) {
+									if(y != j && y != i) {
+										Job job3 = m.jobs.get(y);
+										Integer nbrOpY = job3.getOperations().size();
+										m.C12[j][l][i][q][y] = new IloRange[nbrOpY][m.nbrJobs][];
+										for(int k=0; k<nbrOpY; k++) {
+											for(int v=0; v<m.nbrJobs; v++) {
+												if(v!= y && v!=i && y!=j) {
+													Job job4 = m.jobs.get(v);
+													Integer nbrOpV = job4.getOperations().size();
+													m.C12[j][l][i][q][y][k][v] = new IloRange[nbrOpV];
+													for(int t=0; t<nbrOpV; t++) {
+														IloLinearNumExpr c12 = cplex.linearNumExpr();
+														c12.addTerm(1.0, m.varBegin[j][l]);
+														c12.addTerm(-m.I, m.varPrecedence[i][0][j][0]);
+														c12.addTerm(-m.I, m.varLoad[i][l]);
+														c12.addTerm(-m.I, m.varLoad[j][l]);
+														c12.addTerm(-m.I, m.varPrecedence[i][q][y][k]);
+														c12.addTerm(-m.I, m.varMode[i][q][1]);
+														c12.addTerm(-m.I, m.varMode[y][k][2]);
+														c12.addTerm(-job3.getPositionTime(), m.varMode[y][k][1]);
+														c12.addTerm(-1.0,  m.varWeld[y][k]);
+														c12.addTerm(-m.I, m.varPrecedence[v][t][i][q]);
+														c12.addTerm(-m.I, m.varPrecedence[y][k][v][t]);
+														m.C12[j][l][i][q][y][k][v][t] = cplex.addGe(c12, job3.getOperations().get(k).getProcessingTime() - 7*m.I, 
+																"C12("+j+","+l+","+i+","+q+","+y+","+k+","+v+","+t+")");
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -270,6 +284,8 @@ public class OptimalSchedulingEngine {
 	 * @throws IloException 
 	 */
 	private void displayResult(IloCplex cplex, Model m) throws IloException {
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
 		cplex.output().println("Solution status = " + cplex.getStatus());
 		cplex.output().println("Solution value  = " + cplex.getObjValue());
 		cplex.output().println("Infinity value  = " + m.I);
@@ -284,7 +300,7 @@ public class OptimalSchedulingEngine {
 						Job job2 = m.jobs.get(i);
 						for(int k=0; k<job2.getOperations().size(); k++) {
 							System.out.println("- Opération n°"+(q+1)+", pièce "+(j+1)
-									+" avant opération "+(k+1)+", pièce "+(i+1)+" = "+cplex.getValue(m.varPrecedence[j][q][i][k]));
+									+" avant opération "+(k+1)+", pièce "+(i+1)+" = "+Math.round(cplex.getValue(m.varPrecedence[j][q][i][k])));
 						}
 					}
 				}
@@ -301,7 +317,7 @@ public class OptimalSchedulingEngine {
 				}
 			}
 			double begin = cplex.getValue(m.varBegin[j][load]);
-			System.out.println("=== Pièce n°"+(j+1)+" (chargée sur la station n°"+(load+1)+" à "+begin+" minutes) ===");
+			System.out.println("=== Pièce n°"+(j+1)+" (chargée sur la station n°"+(load+1)+" à "+df.format(begin)+" minutes) ===");
 			System.out.println("Date de réalisation des opérations :");
 			for(int q=0; q<varWeld.length; q++) {
 				double[] varMode = cplex.getValues(m.varMode[j][q]);
@@ -311,9 +327,9 @@ public class OptimalSchedulingEngine {
 						mode = o;
 					}
 				}
-				System.out.println("- Opération n°"+(q+1)+" (executée en mode "+(mode+1)+") a débutée à "+varWeld[q]);
+				System.out.println("- Opération n°"+(q+1)+" (executée en mode "+(mode+1)+") a débutée à "+df.format(varWeld[q]));
 			}
-			System.out.println("=> Ainsi le retard de la pièce n°"+(j+1)+" = "+varDelay[j]);
+			System.out.println("=> Ainsi le retard de la pièce n°"+(j+1)+" = "+df.format(varDelay[j]));
 			System.out.println();
 		}
 		
