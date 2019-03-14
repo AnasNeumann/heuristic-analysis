@@ -52,7 +52,7 @@ public class PalmerHeuristic extends GenericFlowShopHeuristic {
 		for(JobDto job : jobs) {
 			Integer slopeIndex = 0;
 			for(int i = 1; i <= nbrMachines; i++) {
-				slopeIndex += (nbrMachines - (2*i) + 1) *job.getProcessingTimes().get(i-1);
+				slopeIndex += (nbrMachines - (2*i) + 1) * job.getProcessingTimes().get(i-1);
 			}
 			indexedJobs.add(new IndexedJobDto().setJob(job).setSlopeIndex(slopeIndex));
 		}

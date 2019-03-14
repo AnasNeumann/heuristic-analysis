@@ -41,10 +41,10 @@ public class Model {
 	public IloRange[] C9;
 	public IloRange[] C10;
 	public IloRange[][][][] C11;
-	public IloRange[][][][][][][][] C12;
+	public IloRange[][][][][][] C12;
 	public IloRange[] C13;
 	public IloRange[][] C14;
-	public IloRange[][][][][][] C15;
+	public IloRange[][][][] C15;
 
 	/**
 	 * Constructeur à partir d'un probleme
@@ -53,14 +53,14 @@ public class Model {
 	public Model(Instance problem) {
 		this.jobs = problem.getJobs();
 		nbrJobs = this.jobs.size();
-		
+
 		// Calcul d'une borne superieur
 		for(Job j : jobs) {
 			for(Operation o : j.getOperations()) {
 				I += o.getProcessingTime() + j.getPositionTime();
 			}
 		}
-		
+
 		varLoad = new IloIntVar[nbrJobs][nbrLoadStations];
 		varBegin = new IloNumVar[nbrJobs][nbrLoadStations];
 		varWeld = new IloNumVar[nbrJobs][];
@@ -79,9 +79,9 @@ public class Model {
 		C9 = new IloRange[nbrJobs];
 		C10 = new IloRange[nbrJobs];
 		C11 = new IloRange[nbrJobs][][][];
-		C12 = new IloRange[nbrJobs][][][][][][][];
+		C12 = new IloRange[nbrJobs][][][][][];
 		C13 = new IloRange[nbrJobs];
 		C14 = new IloRange[nbrJobs][];
-		C15 = new IloRange[nbrJobs][][][][][];
+		C15 = new IloRange[nbrJobs][][][];
 	}
 }

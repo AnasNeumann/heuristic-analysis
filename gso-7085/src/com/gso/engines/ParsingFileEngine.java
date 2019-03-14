@@ -51,6 +51,7 @@ public class ParsingFileEngine {
     		}
     		instance.getJobs().add(j);
     	}
+    	displayInstance(instance);
         return instance;
     }
 
