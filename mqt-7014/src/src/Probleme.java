@@ -21,7 +21,7 @@ public class Probleme {
 	 * Obtenir le nombre d'items dans la liste
 	 * @return
 	 */
-	public int getNbItemps() {
+	public int getNbItems() {
 		return this.items.size();
 	}
 
@@ -57,7 +57,7 @@ public class Probleme {
 	 * @param fichier
 	 * @return
 	 */
-	public String charger(String fichier) {
+	public void charger(String fichier) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fichier));
 			String[] line = br.readLine().split(" ");
@@ -74,7 +74,6 @@ public class Probleme {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return this.toString();
 	}
 	
 	/**

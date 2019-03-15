@@ -70,17 +70,17 @@ public class Solution {
 		}
 		return result+"]};";
 	}
-	
+
 	/**
-	 * Clonner en profondeur la solution
+	 * Clonner superficiellement la solution
 	 */
 	public Object clone() {
+		List<Item> items = new ArrayList<Item>();
+		items.addAll(items);
 		Solution s = new Solution()
 				.setSomme_poids(this.somme_poids)
-				.setSomme_valeurs(this.somme_valeurs);
-		for(Item i : this.items) {
-			s.ajouter(new Item().setId(i.getId()).setPoids(i.getPoids()).setValeur(i.getValeur()));
-		}
+				.setSomme_valeurs(this.somme_valeurs)
+				.setItems(items);
 		return s;
 	}
 

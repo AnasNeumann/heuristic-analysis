@@ -18,7 +18,9 @@ import ilog.concert.IloRange;
 public class Model {
 	public final Integer nbrLoadStations = 3;
 	public final Integer nbrModes = 3;
-	
+	public final Double MT = 0.3;
+	public final Double LT = 0.2;
+
 	public List<Job> jobs = new ArrayList<Job>();
 	public Integer nbrJobs;
 	public Double I = 0.0;
@@ -50,14 +52,14 @@ public class Model {
 	 * Constructeur à partir d'un probleme
 	 * @param problem
 	 */
-	public Model(Instance problem) {
+	public Model(Instance problem, boolean withMoveTimes) {
 		this.jobs = problem.getJobs();
 		nbrJobs = this.jobs.size();
 
 		// Calcul d'une borne superieur
 		for(Job j : jobs) {
 			for(Operation o : j.getOperations()) {
-				I += o.getProcessingTime() + j.getPositionTime();
+				I += o.getProcessingTime() + j.getPositionTime() + (withMoveTimes? 3*MT + 2*LT : 0);
 			}
 		}
 

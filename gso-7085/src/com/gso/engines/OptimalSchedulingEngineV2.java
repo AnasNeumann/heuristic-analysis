@@ -21,10 +21,10 @@ import ilog.cplex.IloCplex;
  * @since 08/03/2019
  * @version 1.0
  */
-public class OptimalSchedulingEngine {
-	private static OptimalSchedulingEngine engine;
+public class OptimalSchedulingEngineV2 {
+	private static OptimalSchedulingEngineV2 engine;
 
-	private OptimalSchedulingEngine() {
+	private OptimalSchedulingEngineV2() {
 
 	}
 
@@ -33,9 +33,9 @@ public class OptimalSchedulingEngine {
 	 * 
 	 * @return
 	 */
-	public static OptimalSchedulingEngine getEngine() {
+	public static OptimalSchedulingEngineV2 getEngine() {
 		if (null == engine) {
-			engine = new OptimalSchedulingEngine();
+			engine = new OptimalSchedulingEngineV2();
 		}
 		return engine;
 	}
@@ -134,7 +134,7 @@ public class OptimalSchedulingEngine {
 							c3.addTerm(-m.I, m.varMode[i][k][0]);
 							c3.addTerm(-m.I, m.varMode[i][k][2]);
 							m.C3[j][q][i][k] = cplex.addGe(c3,
-									job2.getOperations().get(k).getProcessingTime() - (2 * m.I),
+									job2.getOperations().get(k).getProcessingTime() - (2 * m.I) + 2 * m.MT,
 									"C3(" + j + "," + q + "," + i + "," + k + ")");
 
 							IloLinearNumExpr c4 = cplex.linearNumExpr();
@@ -145,7 +145,7 @@ public class OptimalSchedulingEngine {
 							c4.addTerm(-m.I, m.varMode[j][q][0]);
 							c4.addTerm(-m.I, m.varMode[j][q][1]);
 							m.C4[j][q][i][k] = cplex.addGe(c4,
-									job2.getOperations().get(k).getProcessingTime() - (2 * m.I),
+									job2.getOperations().get(k).getProcessingTime() - (2 * m.I) + 2 * m.MT,
 									"C4(" + j + "," + q + "," + i + "," + k + ")");
 
 							IloLinearNumExpr c5 = cplex.linearNumExpr();
@@ -153,7 +153,7 @@ public class OptimalSchedulingEngine {
 							c5.addTerm(-1.0, m.varWeld[i][k]);
 							c5.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
 							c5.addTerm(-1.0 * m.I, m.varPrecedence[i][k][j][q]);
-							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I, "C5(" + j + "," + q + "," + i + "," + k + ")");
+							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I + 2 * m.MT, "C5(" + j + "," + q + "," + i + "," + k + ")");
 
 							if (q == (nbrOpJ - 1)) {
 								IloLinearNumExpr c15 = cplex.linearNumExpr();
@@ -175,7 +175,7 @@ public class OptimalSchedulingEngine {
 									}
 								}
 								m.C15[j][q][i][k] = cplex.addGe(c15,
-										job2.getOperations().get(k).getProcessingTime() - job.getDueDate() - 3 * m.I,
+										job2.getOperations().get(k).getProcessingTime() - job.getDueDate() - 3 * m.I + m.LT + 2* m.MT,
 										"C15(" + j + "," + q + "," + i + "," + k + ")");
 							}
 						}
@@ -186,7 +186,7 @@ public class OptimalSchedulingEngine {
 					c2.addTerm(1.0, m.varWeld[j][q]);
 					c2.addTerm(-1.0, m.varWeld[j][q - 1]);
 					c2.addTerm(-job.getPositionTime(), m.varMode[j][q - 1][1]);
-					m.C2[j][q] = cplex.addGe(c2, job.getOperations().get(q - 1).getProcessingTime(),
+					m.C2[j][q] = cplex.addGe(c2, job.getOperations().get(q - 1).getProcessingTime() + m.MT,
 							"C2(" + j + "," + q + ")");
 				}
 				IloLinearNumExpr c7 = cplex.linearNumExpr();
@@ -202,7 +202,7 @@ public class OptimalSchedulingEngine {
 					c14.addTerm(1.0, m.varDelay[j]);
 					c14.addTerm(-1.0, m.varWeld[j][q]);
 					c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
-					m.C14[j][q] = cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate(),
+					m.C14[j][q] = cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate() + m.LT + m.MT,
 							"C14(" + j + "," + q + ")");
 				}
 			}
@@ -231,7 +231,7 @@ public class OptimalSchedulingEngine {
 							c11.addTerm(-m.I, m.varLoad[i][l]);
 							c11.addTerm(-m.I, m.varLoad[j][l]);
 							m.C11[j][l][i][q] = cplex.addGe(c11,
-									job2.getOperations().get(q).getProcessingTime() - 3 * m.I,
+									job2.getOperations().get(q).getProcessingTime() - 3 * m.I + 2 * m.LT + m.MT,
 									"C11(" + j + "," + l + "," + i + "," + q + ")");
 
 							if (q == (nbrOpI - 1)) {
@@ -262,7 +262,7 @@ public class OptimalSchedulingEngine {
 													}
 												}
 											}
-											m.C12[j][l][i][q][y][k] = cplex.addGe(c12,job3.getOperations().get(k).getProcessingTime() - 6 * m.I,
+											m.C12[j][l][i][q][y][k] = cplex.addGe(c12,job3.getOperations().get(k).getProcessingTime() - 6 * m.I + 2 * m.LT + 2* m.MT, 
 													"C12(" + j + "," + l + "," + i + "," + q + "," + y + "," + k + ")");
 										}
 									}
@@ -273,7 +273,7 @@ public class OptimalSchedulingEngine {
 					}
 				}
 			}
-			m.C6[j] = cplex.addGe(c6, 0, "C6(" + j + ")");
+			m.C6[j] = cplex.addGe(c6, m.MT, "C6(" + j + ")");
 			m.C9[j] = cplex.addEq(c9, 1, "C9(" + j + ")");
 			m.C10[j] = cplex.addGe(m.varLoad[j][1], job.isSize() ? 1 : 0, "C10(" + j + ")");
 		}
@@ -364,7 +364,7 @@ public class OptimalSchedulingEngine {
 	public void solve(Instance problem) {
 		try {
 			IloCplex cplex = new IloCplex();
-			Model m = new Model(problem, false);
+			Model m = new Model(problem, true);
 			createVariables(cplex, m);
 			createObjectifFunction(cplex, m);
 			createConstraints(cplex, m);
