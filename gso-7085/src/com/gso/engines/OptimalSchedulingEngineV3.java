@@ -21,10 +21,10 @@ import ilog.cplex.IloCplex;
  * @since 08/03/2019
  * @version 1.0
  */
-public class OptimalSchedulingEngineV2 {
-	private static OptimalSchedulingEngineV2 engine;
+public class OptimalSchedulingEngineV3 {
+	private static OptimalSchedulingEngineV3 engine;
 
-	private OptimalSchedulingEngineV2() {
+	private OptimalSchedulingEngineV3() {
 
 	}
 
@@ -33,9 +33,9 @@ public class OptimalSchedulingEngineV2 {
 	 * 
 	 * @return
 	 */
-	public static OptimalSchedulingEngineV2 getEngine() {
+	public static OptimalSchedulingEngineV3 getEngine() {
 		if (null == engine) {
-			engine = new OptimalSchedulingEngineV2();
+			engine = new OptimalSchedulingEngineV3();
 		}
 		return engine;
 	}
@@ -54,6 +54,7 @@ public class OptimalSchedulingEngineV2 {
 			Integer nbrOpJ = m.jobs.get(j).getOperations().size();
 			String[] namesLoads = new String[m.nbrLoadStations];
 			String[] namesBegin = new String[m.nbrLoadStations];
+			String[] namesRemove = new String[m.nbrLoadStations];
 			String[] namesWeld = new String[nbrOpJ];
 			String[] namesParallel = new String[nbrOpJ];
 			m.varMode[j] = new IloIntVar[nbrOpJ][m.nbrModes];
@@ -78,10 +79,12 @@ public class OptimalSchedulingEngineV2 {
 			for (int l = 0; l < m.nbrLoadStations; l++) {
 				namesLoads[l] = "L(" + j + "," + l + ")";
 				namesBegin[l] = "B(" + j + "," + l + ")";
+				namesRemove[l] = "R(" + j + "," + l + ")";
 			}
 			m.varWeld[j] = cplex.numVarArray(nbrOpJ, 0.0, Double.MAX_VALUE, namesWeld);
 			m.varParralel[j] = cplex.boolVarArray(nbrOpJ, namesParallel);
 			m.varLoad[j] = cplex.boolVarArray(m.nbrLoadStations, namesLoads);
+			m.varRemove[j] = cplex.boolVarArray(m.nbrLoadStations, namesRemove);
 			m.varBegin[j] = cplex.numVarArray(m.nbrLoadStations, 0.0, Double.MAX_VALUE, namesBegin);
 		}
 		m.varDelay = cplex.numVarArray(m.nbrJobs, 0.0, Double.MAX_VALUE, namesDelay);
@@ -136,7 +139,9 @@ public class OptimalSchedulingEngineV2 {
 							IloLinearNumExpr c3 = cplex.linearNumExpr();
 							c3.addTerm(1.0, m.varWeld[j][q]);
 							c3.addTerm(-1.0, m.varWeld[i][k]);
-							c3.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							if(k > 0 || !job2.getWeldingHistory().equals(3)) {
+								c3.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							}
 							c3.addTerm(-m.I, m.varPrecedence[i][k][j][q]);
 							c3.addTerm(-m.I, m.varMode[i][k][0]);
 							c3.addTerm(-m.I, m.varMode[i][k][2]);
@@ -147,7 +152,9 @@ public class OptimalSchedulingEngineV2 {
 							IloLinearNumExpr c4 = cplex.linearNumExpr();
 							c4.addTerm(1.0, m.varWeld[j][q]);
 							c4.addTerm(-1.0, m.varWeld[i][k]);
-							c4.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							if(k > 0 || !job2.getWeldingHistory().equals(3)) {
+								c4.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							}
 							c4.addTerm(-m.I, m.varPrecedence[i][k][j][q]);
 							c4.addTerm(-m.I, m.varMode[j][q][0]);
 							c4.addTerm(-m.I, m.varMode[j][q][1]);
@@ -158,7 +165,9 @@ public class OptimalSchedulingEngineV2 {
 							IloLinearNumExpr c16 = cplex.linearNumExpr();
 							c16.addTerm(1.0, m.varWeld[j][q]);
 							c16.addTerm(-1.0, m.varWeld[i][k]);
-							c16.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							if(k > 0 || !job2.getWeldingHistory().equals(3)) {
+								c16.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							}
 							c16.addTerm(-m.I, m.varPrecedence[i][k][j][q]);
 							c16.addTerm(+m.I, m.varParralel[j][q]);
 							m.C16[j][q][i][k] = cplex.addGe(c16,
@@ -167,16 +176,22 @@ public class OptimalSchedulingEngineV2 {
 
 							IloLinearNumExpr c5 = cplex.linearNumExpr();
 							c5.addTerm(1.0, m.varWeld[j][q]);
-							c5.addTerm(-1.0, m.varWeld[i][k]);
-							c5.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+							c5.addTerm(-1.0, m.varWeld[i][k]);						
 							c5.addTerm(-1.0 * m.I, m.varPrecedence[i][k][j][q]);
-							m.C5[j][q][i][k] = cplex.addGe(c5, -m.I + 2 * m.MT, "C5(" + j + "," + q + "," + i + "," + k + ")");
+							if(k>0 || !job2.getWeldingHistory().equals(3)) {
+								c5.addTerm(-1.0 * job2.getPositionTime(), m.varMode[i][k][1]);
+								m.C5[j][q][i][k] = cplex.addGe(c5, -m.I + 2 * m.MT, "C5(" + j + "," + q + "," + i + "," + k + ")");
+							} else {
+								m.C5[j][q][i][k] = cplex.addGe(c5, -m.I, "C5(" + j + "," + q + "," + i + "," + k + ")");
+							}
 
 							if (q == (nbrOpJ - 1)) {
 								IloLinearNumExpr c15 = cplex.linearNumExpr();
 								c15.addTerm(1.0, m.varDelay[j]);
 								c15.addTerm(-1.0, m.varWeld[i][k]);
-								c15.addTerm(-job2.getPositionTime(), m.varMode[i][k][1]);
+								if(k > 0 || !job2.getWeldingHistory().equals(3)) {
+									c15.addTerm(-job2.getPositionTime(), m.varMode[i][k][1]);
+								}
 								c15.addTerm(-m.I, m.varPrecedence[j][q][i][k]);
 								c15.addTerm(-m.I, m.varMode[j][q][1]);
 								c15.addTerm(-m.I, m.varMode[i][k][2]);
@@ -204,8 +219,10 @@ public class OptimalSchedulingEngineV2 {
 					IloLinearNumExpr c2 = cplex.linearNumExpr();
 					c2.addTerm(1.0, m.varWeld[j][q]);
 					c2.addTerm(-1.0, m.varWeld[j][q - 1]);
+					if(!job.getWeldingHistory().equals(3)) {
+						c2.addTerm(-job.getPositionTime(), m.varMode[j][q - 1][1]);
+					}
 					c2.addTerm(-3 * m.MT, m.varParralel[j][q - 1]);
-					c2.addTerm(-job.getPositionTime(), m.varMode[j][q - 1][1]);
 					m.C2[j][q] = cplex.addGe(c2, job.getOperations().get(q - 1).getProcessingTime() + m.MT,
 							"C2(" + j + "," + q + ")");
 				}
@@ -224,12 +241,15 @@ public class OptimalSchedulingEngineV2 {
 					IloLinearNumExpr c14 = cplex.linearNumExpr();
 					c14.addTerm(1.0, m.varDelay[j]);
 					c14.addTerm(-1.0, m.varWeld[j][q]);
-					c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
+					if(q > 0 || !job.getWeldingHistory().equals(3)) {
+						c14.addTerm(-job.getPositionTime(), m.varMode[j][q][1]);
+					}
 					m.C14[j][q] = cplex.addGe(c14, job.getOperations().get(q).getProcessingTime() - job.getDueDate() + m.LT + m.MT,
 							"C14(" + j + "," + q + ")");
 				}
 			}
 			IloLinearNumExpr c6 = cplex.linearNumExpr();
+			double totalMTC6 = 0;
 			IloLinearNumExpr c9 = cplex.linearNumExpr();
 			c6.addTerm(1.0, m.varWeld[j][0]);
 			m.C11[j] = new IloRange[m.nbrLoadStations][][];
@@ -237,6 +257,8 @@ public class OptimalSchedulingEngineV2 {
 			for (int l = 0; l < m.nbrLoadStations; l++) {
 				c9.addTerm(1.0, m.varLoad[j][l]);
 				c6.addTerm(-1.0, m.varBegin[j][l]);
+				c6.addTerm(- m.MT * (job.getLoadingHistory().equals(l+1)? 1 : 0) * (job.getWeldingHistory() > 0? 1 : 0), m.varRemove[j][l]);
+				totalMTC6 += (m.MT * (job.getLoadingHistory().equals(l+1)? 1 : 0) * (job.getWeldingHistory() > 0? 1 : 0));
 				m.C11[j][l] = new IloRange[m.nbrJobs][];
 				m.C12[j][l] = new IloRange[m.nbrJobs][][][];
 				for (int i = 0; i < m.nbrJobs; i++) {
@@ -249,7 +271,9 @@ public class OptimalSchedulingEngineV2 {
 							IloLinearNumExpr c11 = cplex.linearNumExpr();
 							c11.addTerm(1.0, m.varBegin[j][l]);
 							c11.addTerm(-1.0, m.varWeld[i][q]);
-							c11.addTerm(-job2.getPositionTime(), m.varMode[i][q][1]);
+							if(q > 0 || !job2.getWeldingHistory().equals(3)) {
+								c11.addTerm(-job2.getPositionTime(), m.varMode[i][q][1]);
+							}
 							c11.addTerm(-m.I, m.varPrecedence[i][0][j][0]);
 							c11.addTerm(-m.I, m.varLoad[i][l]);
 							c11.addTerm(-m.I, m.varLoad[j][l]);
@@ -272,9 +296,11 @@ public class OptimalSchedulingEngineV2 {
 											c12.addTerm(-m.I, m.varPrecedence[i][q][y][k]);
 											c12.addTerm(-m.I, m.varMode[i][q][1]);
 											c12.addTerm(-m.I, m.varMode[y][k][2]);
-											c12.addTerm(-m.I, m.varParralel[y][k]);
-											c12.addTerm(-job3.getPositionTime(), m.varMode[y][k][1]);
+											if(k > 0 || !job3.getWeldingHistory().equals(3)) {
+												c12.addTerm(-job3.getPositionTime(), m.varMode[y][k][1]);
+											}
 											c12.addTerm(-1.0, m.varWeld[y][k]);
+											c12.addTerm(-m.I, m.varParralel[y][k]);
 											for (int v = 0; v < m.nbrJobs; v++) {
 												if (v != y && v != i && y != j) {
 													Job job4 = m.jobs.get(v);
@@ -292,13 +318,33 @@ public class OptimalSchedulingEngineV2 {
 										}
 									}
 								}
-
 							}
+						}
+						if(m.jobs.get(j).getLoadingHistory().equals(l+1)) {												
+							IloLinearNumExpr c20 = cplex.linearNumExpr();
+							c20.addTerm(1, m.varRemove[j][l]);
+							c20.addTerm(- m.I, m.varLoad[i][l]);
+							c20.addTerm(- m.I, m.varPrecedence[i][0][j][0]);
+							m.C20[j][l][i] = cplex.addGe(c20, 1 - 2 * m.I, "C20(" + j + "," + l + "," + i + ")");
+						}
+						if(m.jobs.get(i).getLoadingHistory().equals(l+1)) {	
+							IloLinearNumExpr c19 = cplex.linearNumExpr();
+							c19.addTerm(1, m.varBegin[j][l]);
+							c19.addTerm(- m.I, m.varLoad[j][l]);
+							m.C19[j][l][i] = cplex.addGe(c19, 2*m.LT + m.MT * m.jobs.get(i).getWeldingHistory() -m.I, "C19(" + j + "," + l + "," + i + ")");
 						}
 					}
 				}
+				IloLinearNumExpr c18 = cplex.linearNumExpr();
+				c18.addTerm(1, m.varBegin[j][l]);
+				c18.addTerm(- m.I, m.varLoad[j][l]);
+				for (int l2 = 0; l2 < m.nbrLoadStations; l2++) {
+					c18.addTerm(-2*m.LT - m.MT * m.jobs.get(j).getWeldingHistory(), m.varRemove[j][l2]);
+				}
+				m.C18[j][l] = cplex.addGe(c18, -m.I, "C18(" + j + "," + l + ")");
 			}
-			m.C6[j] = cplex.addGe(c6, m.MT, "C6(" + j + ")");
+			System.out.println("Total pour le job " + j +" : "+totalMTC6);
+			m.C6[j] = cplex.addGe(c6, m.MT - totalMTC6, "C6(" + j + ")");
 			m.C9[j] = cplex.addEq(c9, 1, "C9(" + j + ")");
 			m.C10[j] = cplex.addGe(m.varLoad[j][1], job.isSize() ? 1 : 0, "C10(" + j + ")");
 		}
@@ -359,10 +405,18 @@ public class OptimalSchedulingEngineV2 {
 				if (varLoad[l] > 0) {
 					load = l;
 				}
+				
 			}
 			double begin = cplex.getValue(m.varBegin[j][load]);
 			System.out.println("=== Pièce n°" + (j + 1) + " (chargée sur la station n°" + (load + 1) + " à "
 					+ df.format(begin) + " minutes) ===");
+			int l=0;
+			for(double r : cplex.getValues(m.varRemove[j])){
+				l++;
+				if(r > 0) {
+					System.out.println("Cette pièce a été déchargée de la station "+l);
+				}
+			}
 			System.out.println("Date de réalisation des opérations :");
 			for (int q = 0; q < varWeld.length; q++) {
 				double[] varMode = cplex.getValues(m.varMode[j][q]);
@@ -372,7 +426,8 @@ public class OptimalSchedulingEngineV2 {
 						mode = o;
 					}
 				}
-				System.out.println("- Opération n°" + (q + 1) + " (executée en mode " + (mode + 1) + ") a débutée à "
+				double parrallele = cplex.getValue(m.varParralel[j][q]);
+				System.out.println("- Opération n°" + (q + 1) + " (executée en mode " + (mode + 1) + (parrallele > 0? " en parrallèle" : "") + ") a débutée à "
 						+ df.format(varWeld[q]));
 			}
 			System.out.println("=> Ainsi le retard de la pièce n°" + (j + 1) + " = " + df.format(varDelay[j]));

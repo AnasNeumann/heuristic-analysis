@@ -49,6 +49,9 @@ public class ParsingFileEngine {
     						.setProcessingTime(ligne.get(8+i).isEmpty()? new Double(ligne.get(2)) : new Double(ligne.get(8+i))));
     			}
     		}
+    		if(!ligne.get(12).isEmpty() && !ligne.get(13).isEmpty()) {
+    			j.setLoadingHistory(new Double(ligne.get(12)).intValue()).setWeldingHistory(new Double(ligne.get(13)).intValue());
+    		}
     		instance.getJobs().add(j);
     	}
     	displayInstance(instance);
@@ -71,7 +74,7 @@ public class ParsingFileEngine {
 	        	List<String> ligne = new ArrayList<String>();
 	            Row currentRow = iterator.next();
 	            boolean first = true;
-	            for(int c=0; c<12; c++) {
+	            for(int c=0; c<14; c++) {
 	                Cell currentCell = currentRow.getCell(c);
 	                if(first && (null == currentCell || 0 >= currentCell.getStringCellValue().length())) {
 	                	result.remove(0);

@@ -52,7 +52,7 @@ public class FlowShopSolver extends Thread{
 				for(int j = 0; j < nbrJobs; j++) {
 					names[j] = "X"+i+""+j;
 				}
-				positionVariables[i] = cplex.numVarArray(problem.getJobs().size(), 0, 1, names);
+				positionVariables[i] = cplex.boolVarArray(nbrJobs, names);
 			}
 			var[0] = positionVariables;
 
@@ -82,7 +82,7 @@ public class FlowShopSolver extends Thread{
 					expr2.addTerm(1.0, var[0][p][j]);
 				}
 				rng[0][p] = cplex.addEq(expr1, 1);
-				rng[1][p] = cplex.addEq(expr2, 1);;
+				rng[1][p] = cplex.addEq(expr2, 1);
 			}
 
 			// Contraintes n°3 : Fip >= Fi(p-1) pour p>1

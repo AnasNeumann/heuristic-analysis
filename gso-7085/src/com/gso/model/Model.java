@@ -31,6 +31,8 @@ public class Model {
 	public IloIntVar[][][] varMode;
 	public IloIntVar[][][][] varPrecedence;
 	public IloNumVar[] varDelay;
+	public IloNumVar[][] varParralel;
+	public IloNumVar[][] varRemove;
 
 	public IloRange[][][][] C1;
 	public IloRange[][] C2;
@@ -47,6 +49,11 @@ public class Model {
 	public IloRange[] C13;
 	public IloRange[][] C14;
 	public IloRange[][][][] C15;
+	public IloRange[][][][] C16;
+	public IloRange[][] C17;
+	public IloRange[][] C18;
+	public IloRange[][][] C19;
+	public IloRange[][][] C20;
 
 	/**
 	 * Constructeur à partir d'un probleme
@@ -69,6 +76,8 @@ public class Model {
 		varMode = new IloIntVar[nbrJobs][][];
 		varPrecedence = new IloIntVar[nbrJobs][][][];
 		varDelay = new IloNumVar[nbrJobs];
+		varParralel = new IloNumVar[nbrJobs][];
+		varRemove = new IloNumVar[nbrJobs][nbrLoadStations];
 
 		C1 = new IloRange[nbrJobs][][][];
 		C2 = new IloRange[nbrJobs][];
@@ -85,5 +94,10 @@ public class Model {
 		C13 = new IloRange[nbrJobs];
 		C14 = new IloRange[nbrJobs][];
 		C15 = new IloRange[nbrJobs][][][];
+		C16 = new IloRange[nbrJobs][][][];
+		C17 = new IloRange[nbrJobs][];
+		C18 = new IloRange[nbrJobs][nbrLoadStations];
+		C19 = new IloRange[nbrJobs][nbrLoadStations][nbrJobs];
+		C20 = new IloRange[nbrJobs][nbrLoadStations][nbrJobs];
 	}
 }

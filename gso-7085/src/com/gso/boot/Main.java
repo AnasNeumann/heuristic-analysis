@@ -2,6 +2,7 @@ package com.gso.boot;
 
 import com.gso.engines.OptimalSchedulingEngine;
 import com.gso.engines.OptimalSchedulingEngineV2;
+import com.gso.engines.OptimalSchedulingEngineV3;
 import com.gso.engines.ParsingFileEngine;
 
 /**
@@ -18,7 +19,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		// 1ere version de l'engin
 		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_5.xlsx"));
 		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4.xlsx"));
@@ -26,5 +27,9 @@ public class Main {
 
 		// 2eme version de l'engin (avec calcul des temps de mouvements)
 		OptimalSchedulingEngineV2.getEngine().solve(ParsingFileEngine.BuildInstance("instance_3.xlsx"));
+		OptimalSchedulingEngineV2.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4_2.xlsx"));
+		
+		// 3eme version de l'engin (dynamique avec historique et déchargement)
+		OptimalSchedulingEngineV3.getEngine().solve(ParsingFileEngine.BuildInstance("instance_dynamique.xlsx"));
 	}
 }

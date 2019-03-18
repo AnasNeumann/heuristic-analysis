@@ -16,6 +16,8 @@ public class Job {
 	private boolean size;
 	private Double dueDate;
 	private Double positionTime;
+	private Integer loadingHistory;
+	private Integer weldingHistory;
 	private List<Operation> operations = new ArrayList<Operation>();
 
 	/**
@@ -97,4 +99,33 @@ public class Job {
 		return this;
 	}
 
+	/**
+	 * @return the loadingHistory
+	 */
+	public Integer getLoadingHistory() {
+		return loadingHistory;
+	}
+
+	/**
+	 * @param loadingHistory the loadingHistory to set
+	 */
+	public Job setLoadingHistory(Integer loadingHistory) {
+		this.loadingHistory = loadingHistory;
+		return this;
+	}
+
+	/**
+	 * @return the weldingHistory
+	 */
+	public Integer getWeldingHistory() {
+		return weldingHistory;
+	}
+
+	/**
+	 * @param weldingHistory the weldingHistory to set
+	 */
+	public Job setWeldingHistory(Integer weldingHistory) {
+		this.weldingHistory = weldingHistory;
+		return this;
+	}
 }
