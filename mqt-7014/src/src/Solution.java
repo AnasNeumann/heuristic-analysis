@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class Solution {
 	private List<Item> items = new ArrayList<Item>();
-	private Integer somme_poids;
-	private Integer somme_valeurs;
+	private Integer somme_poids = 0;
+	private Integer somme_valeurs = 0;
 
 	/**
 	 * Obtenir le nombre d'objets dans le sac
@@ -75,13 +75,12 @@ public class Solution {
 	 * Clonner superficiellement la solution
 	 */
 	public Object clone() {
-		List<Item> items = new ArrayList<Item>();
-		items.addAll(items);
-		Solution s = new Solution()
+		List<Item> newItems = new ArrayList<Item>();
+		newItems.addAll(items);
+		return new Solution()
 				.setSomme_poids(this.somme_poids)
 				.setSomme_valeurs(this.somme_valeurs)
-				.setItems(items);
-		return s;
+				.setItems(newItems);
 	}
 
 	/**

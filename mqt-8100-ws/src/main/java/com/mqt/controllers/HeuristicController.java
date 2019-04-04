@@ -41,7 +41,6 @@ public class HeuristicController extends GenericController {
 	
 	/**
 	 * get All heuristics
-
 	 * @param request
 	 * @return
 	 */
@@ -57,7 +56,6 @@ public class HeuristicController extends GenericController {
 
 	/**
 	 * create a new heuristic
-	 * 
 	 * @param request
 	 * @return
 	 */
@@ -78,7 +76,6 @@ public class HeuristicController extends GenericController {
 	
 	/**
 	 * delete a specific heuristic
-	 * 
 	 * @param request
 	 * @param id
 	 * @return
@@ -96,7 +93,6 @@ public class HeuristicController extends GenericController {
 	
 	/**
 	 * add a value for an heuristic and an instance
-	 * 
 	 * @param request
 	 * @param instance
 	 * @param heuristic

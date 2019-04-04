@@ -9,8 +9,8 @@ package com.gso.model;
  * @version 1.0
  */
 public class Operation {
-	private Double processingTime;
-	private Integer weldingProcess;
+	protected Double processingTime;
+	protected Integer weldingProcess;
 
 	/**
 	 * @return the processingTime

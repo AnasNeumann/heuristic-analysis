@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Classe de données représentant un Problème de sac à dos
@@ -77,10 +78,17 @@ public class Probleme {
 	}
 	
 	/**
-	 * Mélanger les items avec la méthode de Fisher-Yates
+	 * Mélanger les items avec la méthode de Fisher-Yates (version moderne dans le même tableau)
 	 */
 	public void melanger() {
-		//TODO
+		Random generator = new Random();
+		for(int i=0; i<items.size()-1; i++) {
+			int k = generator.nextInt(items.size()-1);
+			Item itemI = items.remove(i);
+			Item itemK = items.remove(k);
+			items.add(i, itemK);
+			items.add(k, itemI);
+		}
 	}
 
 	/**

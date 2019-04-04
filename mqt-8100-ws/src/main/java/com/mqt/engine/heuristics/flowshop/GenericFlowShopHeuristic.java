@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mqt.comparators.flowshop.ELComparator;
 import com.mqt.comparators.flowshop.ERComparator;
+import com.mqt.pojo.dto.flowshop.FlowShopHeuristicDto;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
 import com.mqt.pojo.dto.flowshop.JobDto;
 import com.mqt.pojo.dto.flowshop.SequenceDto;
@@ -26,6 +27,23 @@ public class GenericFlowShopHeuristic {
 	protected ELComparator elComparator;
 	@Autowired
 	protected ERComparator erComparator;
+
+	/**
+	 * Construction d'une solution initiale
+	 * @param instance
+	 * @return
+	 */
+	protected FlowShopHeuristicDto buildFirstSolution(FlowShopInstanceDto instance, Integer nbrMachines, String name){
+		List<SequenceDto> sequences = new ArrayList<SequenceDto>();
+		for(JobDto j : instance.getJobs()) {
+			sequences.add(new SequenceDto().setJob(j));
+		}
+		FlowShopHeuristicDto initialSolution = new FlowShopHeuristicDto()
+				.setSequences(sequences)
+				.setOptimal(getMakespan(sequences, nbrMachines))
+				.setName(name);
+		return initialSolution;
+	}
 	
 	/**
 	 * Parse a file and get the list of all instances
@@ -134,6 +152,19 @@ public class GenericFlowShopHeuristic {
 	protected List<SequenceDto> getNewSequences(List<SequenceDto> sequences, SequenceDto newSequence, Integer position){
 		List<SequenceDto> result = new ArrayList<SequenceDto>(sequences);
 		result.add(position, newSequence);
+		return result;
+	}
+	
+	/**
+	 * Clone a sequences
+	 * @param sequences
+	 * @return
+	 */
+	protected List<SequenceDto> clone(List<SequenceDto> sequences){
+		List<SequenceDto> result = new ArrayList<SequenceDto>();
+		for(SequenceDto s : sequences) {
+			result.add(new SequenceDto().setJob(s.getJob()));
+		}
 		return result;
 	}
 }

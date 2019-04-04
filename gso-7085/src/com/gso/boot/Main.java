@@ -1,6 +1,6 @@
 package com.gso.boot;
 
-import com.gso.engines.OptimalSchedulingEngine;
+import com.gso.engines.MultiNeighborhoodSearchEngin;
 import com.gso.engines.OptimalSchedulingEngineV2;
 import com.gso.engines.OptimalSchedulingEngineV3;
 import com.gso.engines.ParsingFileEngine;
@@ -20,16 +20,13 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		// 1ere version de l'engin
-		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_5.xlsx"));
-		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4.xlsx"));
-		OptimalSchedulingEngine.getEngine().solve(ParsingFileEngine.BuildInstance("instance_2.xlsx"));
-
 		// 2eme version de l'engin (avec calcul des temps de mouvements)
-		OptimalSchedulingEngineV2.getEngine().solve(ParsingFileEngine.BuildInstance("instance_3.xlsx"));
 		OptimalSchedulingEngineV2.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4_2.xlsx"));
-		
+
 		// 3eme version de l'engin (dynamique avec historique et déchargement)
 		OptimalSchedulingEngineV3.getEngine().solve(ParsingFileEngine.BuildInstance("instance_dynamique.xlsx"));
+		
+		// Résolution à travers l'heuristique
+		MultiNeighborhoodSearchEngin.getEngine().solve(ParsingFileEngine.BuildInstance("instance_4_2.xlsx"), 0.3, 0.2);
 	}
 }

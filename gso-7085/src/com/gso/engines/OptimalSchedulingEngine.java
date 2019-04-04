@@ -29,7 +29,7 @@ public class OptimalSchedulingEngine {
 	}
 
 	/**
-	 * Récupérer le signleton
+	 * Récupérer le singleton
 	 * 
 	 * @return
 	 */

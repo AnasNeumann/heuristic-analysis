@@ -12,12 +12,12 @@ import java.util.List;
  * @version 1.0
  */
 public class Job {
-	private Long id;
-	private boolean size;
-	private Double dueDate;
-	private Double positionTime;
-	private Integer loadingHistory;
-	private Integer weldingHistory;
+	protected Long id;
+	protected boolean size;
+	protected Double dueDate;
+	protected Double positionTime;
+	protected Integer loadingHistory;
+	protected Integer weldingHistory;
 	private List<Operation> operations = new ArrayList<Operation>();
 
 	/**

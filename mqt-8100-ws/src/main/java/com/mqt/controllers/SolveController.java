@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mqt.boot.Constantes;
-import com.mqt.engine.heuristics.flowshop.CDSHeuristic;
 import com.mqt.engine.heuristics.flowshop.GenericFlowShopHeuristic;
+import com.mqt.engine.heuristics.flowshop.LocalSearchHeuristic;
 import com.mqt.engine.heuristics.flowshop.NEHHeuristic;
 import com.mqt.engine.heuristics.flowshop.PalmerHeuristic;
+import com.mqt.engine.heuristics.flowshop.SimulatedAnnealingHeuristic;
 import com.mqt.engine.solver.FlowShopSolver;
 import com.mqt.pojo.Response;
 import com.mqt.pojo.dto.flowshop.FlowShopInstanceDto;
@@ -39,9 +40,11 @@ public class SolveController extends GenericController {
 	 * Injection of dependencies
 	 */
 	@Autowired
-	private NEHHeuristic nehHeuristic;
+	private LocalSearchHeuristic LSHeuristic;
 	@Autowired
-	private CDSHeuristic cdsHeuristic;
+	private NEHHeuristic NEHHeuristic;
+	@Autowired
+	private SimulatedAnnealingHeuristic SAHeuristic;
 	@Autowired
 	private PalmerHeuristic palmerHeuristic;
 	@Autowired
@@ -53,29 +56,37 @@ public class SolveController extends GenericController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/solve/flowshop", headers = "Content-Type= multipart/form-data", method = RequestMethod.POST, produces = Constantes.MIME_JSON)
+	@RequestMapping(value = "/solve/flowshop", headers = "Content-Type= multipart/form-data", 
+					method = RequestMethod.POST, 
+					produces = Constantes.MIME_JSON)
 	public ResponseEntity<Response> flowshop(HttpServletRequest request) {
 		List<FlowShopInstanceDto> instances = GenericFlowShopHeuristic.parse(request.getParameter("file"));
 		deleteService.purge();
+		Long idLocalSearch = heuristicService.createOrUpdate(new HeuristicVo().setName("Local Search"));
+		Long idSA = heuristicService.createOrUpdate(new HeuristicVo().setName("Simulated Annealing"));
 		Long idNEH = heuristicService.createOrUpdate(new HeuristicVo().setName("NEH"));
-		Long idCDS = heuristicService.createOrUpdate(new HeuristicVo().setName("CDS"));
-		long idPalmer = heuristicService.createOrUpdate(new HeuristicVo().setName("Palmer"));
-		for(FlowShopInstanceDto i : instances) {
+		for(FlowShopInstanceDto i : instances) {		
 			InstanceVo instance = new InstanceVo().
 					setId(i.getId())
 					.setTimestamps(GregorianCalendar.getInstance())
 					.setOptimal(0);
 			instance.setId(instanceService.createOrUpdate(instance));
-			solver.solve(i, instance);
-			i.getHeuristics().add(nehHeuristic.solve(i));
-			i.getHeuristics().add(palmerHeuristic.solve(i));
-			i.getHeuristics().add(cdsHeuristic.solve(i));
-			Double NEHValue = i.getHeuristics().get(0).getOptimal();
-			Double CDSValue = i.getHeuristics().get(1).getOptimal();
-			Double palmerValue = i.getHeuristics().get(2).getOptimal();
-			valueService.createOrUpdate(new ValueVo().setHeuristicId(idNEH).setInstance(instance).setValue(NEHValue.intValue()));
-			valueService.createOrUpdate(new ValueVo().setHeuristicId(idPalmer).setInstance(instance).setValue(CDSValue.intValue()));
-			valueService.createOrUpdate(new ValueVo().setHeuristicId(idCDS).setInstance(instance).setValue(palmerValue.intValue()));
+			solver.solve(i, instance);			
+			i.getHeuristics().add(NEHHeuristic.solve(i));
+			i.getHeuristics().add(LSHeuristic.solveOnlyOneNeightborhood(i, i.getHeuristics().get(0)));
+			i.getHeuristics().add(SAHeuristic.solve(i, palmerHeuristic.solve(i), 60.0));					
+			valueService.createOrUpdate(new ValueVo()
+					.setHeuristicId(idNEH)
+					.setInstance(instance)
+					.setValue(i.getHeuristics().get(0).getOptimal().intValue()));
+			valueService.createOrUpdate(new ValueVo()
+					.setHeuristicId(idLocalSearch)
+					.setInstance(instance)
+					.setValue(i.getHeuristics().get(1).getOptimal().intValue()));
+			valueService.createOrUpdate(new ValueVo()
+					.setHeuristicId(idSA)
+					.setInstance(instance)
+					.setValue(i.getHeuristics().get(2).getOptimal().intValue()));
 		}
 		return many(instances);
 	}
