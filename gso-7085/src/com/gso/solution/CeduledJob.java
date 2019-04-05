@@ -42,6 +42,29 @@ public class CeduledJob extends Job implements Comparable<CeduledJob> {
 	}
 
 	/**
+	 * clone a ceduled job
+	 */
+	public CeduledJob clone() {
+		List<CeduledOperation> cloneOperations = new ArrayList<CeduledOperation>();
+		for(CeduledOperation o : this.ceduledOperations) {
+			cloneOperations.add(o.clone());
+		}
+		CeduledJob j = new CeduledJob().setId(this.getId())
+				.setLoadingHistory(this.getLoadingHistory())
+				.setPositionTime(this.getPositionTime())
+				.setSize(this.isSize())
+				.setWeldingHistory(this.getWeldingHistory())
+				.setDueDate(this.getDueDate())
+				.setLoadedDate(this.loadedDate)
+				.setLoadedStation(this.loadedStation)
+				.setRemoved(this.removed)
+				.setEndDate(this.endDate)
+				.setCeduledOperations(cloneOperations);
+		j.totalTime = this.totalTime;
+		return j;
+	}
+
+	/**
 	 * Redéfinition de la méthode de comparaison
 	 * @param i
 	 */

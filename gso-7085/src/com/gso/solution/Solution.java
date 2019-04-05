@@ -36,6 +36,21 @@ public class Solution {
 	}
 
 	/**
+	 * clone a complete solution
+	 */
+	public Solution clone() {
+		List<CeduledJob> cloneJobs = new ArrayList<CeduledJob>();
+		for(CeduledJob j : this.jobs) {
+			cloneJobs.add(j.clone());
+		}
+		Solution s = new Solution()
+				.setJobs(cloneJobs);
+		s.MT = this.MT;
+		s.LT = this.LT;
+		return s;
+	}
+
+	/**
 	 * Calculer la valeur de la fonction objectif d'une solution
 	 * @return
 	 */

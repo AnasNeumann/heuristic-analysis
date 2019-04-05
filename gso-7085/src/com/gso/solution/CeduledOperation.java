@@ -35,6 +35,19 @@ public class CeduledOperation extends Operation {
 	}
 	
 	/**
+	 * Clone a cedulled opération
+	 */
+	public CeduledOperation clone() {
+		return new CeduledOperation()
+				.setWeldingProcess(this.getWeldingProcess())
+				.setProcessingTime(this.getProcessingTime())
+				.setPosition(this.getPosition())
+				.setBeginDate(this.beginDate)
+				.setEndDate(this.endDate)
+				.setMode(this.mode);
+	}
+
+	/**
 	 * Affichage des informations sur les modes et procédés appliqués
 	 * @return
 	 */
