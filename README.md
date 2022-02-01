@@ -1,7 +1,7 @@
 # HEURISTIC ANALYSIS
 
 ## MQT-8100
-A web platform for statistical analysis (student, wilcoxon, sign, kolmogoriv, etc.) of the performance of heuristic methods (local search, NEH, genetic algorithm, simulated annealing, etc.) applied to Flow Shop problems.
+A web platform for statistical analysis (student, wilcoxon, sign, kolmogorov, etc.) of the performance of heuristic methods (local search, NEH, genetic algorithm, simulated annealing, etc.) applied to Flow Shop problems.
 
 ## GSO-7085
 Data model, exact (mathematical with Cplex) and heuristic (Variable Neighborhood Local Search) optimization of a real problem: industrial welding robot.
