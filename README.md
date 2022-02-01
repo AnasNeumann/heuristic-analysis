@@ -1,5 +1,8 @@
 # HEURISTIC ANALYSIS
 
+* Gitlab main repository: https://gitlab.comwork.io/oss/heuristic-analysis
+* Github backup: https://github.com/AnasNeumann/heuristic-analysis
+
 ## GSO-7085
 Data model, exact (mathematical with Cplex) and heuristic (Variable Neighborhood Local Search) optimization of a real problem: industrial welding robot.
 
